@@ -4,11 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour {
-    public GameObject currentPanel;
+    GameObject currentPanel;
+    public GameObject defaultPanel;
     public GameObject canvas;
 	// Use this for initialization
 	void Start () {
-        Instantiate(currentPanel);
+        this.currentPanel = Instantiate(defaultPanel);
 	}
 	
 	// Update is called once per frame

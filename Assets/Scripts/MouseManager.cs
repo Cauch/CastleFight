@@ -7,6 +7,7 @@ using System.IO;
 public class MouseManager : MonoBehaviour {
     enum PANELS { UNIT, BUILDING, BUILDER};
 
+    public GameObject defaultSelection;
     public GameObject hoveredObject;
     public GameObject selectedObject;
     GameObject previousSelectedObject;
@@ -28,11 +29,15 @@ public class MouseManager : MonoBehaviour {
         panels.Add(PANELS.UNIT, panelList[0]);
         panels.Add(PANELS.BUILDING, panelList[1]);
         panels.Add(PANELS.BUILDER, panelList[2]);
+
+        selectedObject = previousSelectedObject = defaultSelection;
     }
 
     // Update is called once per frame
     void Update () {
         previousSelectedObject = selectedObject;
+        //Look if selectedObject was destroyed
+        if(selectedObject == null) { selectedObject = defaultSelection; }
         if (EventSystem.current.IsPointerOverGameObject(UI_POINTER)) {
             
         } else {
@@ -117,7 +122,10 @@ public class MouseManager : MonoBehaviour {
             } else if (selectedObject.GetComponent<Building>() != null)
             {
                 panels.TryGetValue(PANELS.BUILDING, out activePanel);
-                //activePanel.GetComponent<UIBuildingManager>().unit = selectedObject.GetComponent<Building>();
+                activePanel.GetComponent<UIBuildingManager>().building = selectedObject.GetComponent<Building>();
+            } else
+            {
+                panels.TryGetValue(PANELS.BUILDER, out activePanel);
             }
         }
         uiManager.ReplacePanel(activePanel);
