@@ -42,7 +42,6 @@ public class Unit : Attackable {
             if (!AttackTarget()) {
                 Move();
             } else {
-                Debug.Log("DINDN'T MOVE");
             }
         }
     }
