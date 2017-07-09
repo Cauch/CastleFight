@@ -13,19 +13,10 @@ public class Unit : Attackable {
     public float speed;
 
     List<Attackable> enemies;
-    //List<Attackable> ennemiesWithinRange;
-
-    //Unit(GameObject self, GameObject enemyCastle, float attackSpeed, float dammage, float speed, float hp, float armor) : base(hp, armor)
-    //{
-    //    this.self = self;
-    //    this.enemyCastlePos = GameObject.FindGameObjectWithTag("Castle1").transform.position; ;
-    //    this.attackSpeed = attackSpeed;
-    //    this.dammage = dammage;
-    //    this.speed = speed;
-    //}
 
     void Start()
     {
+        uiPanel.GetComponent<UIUnitManager>().unit = this;
         this.enemyCastle = this.allegiance == false ?  GameObject.FindGameObjectWithTag("Castle1").GetComponent<Attackable>() : GameObject.FindGameObjectWithTag("Castle0").GetComponent<Attackable>();
         target = enemyCastle;
         enemies = new List<Attackable>();

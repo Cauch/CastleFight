@@ -17,7 +17,7 @@ public class TestBuilding : MonoBehaviour {
             GameObject temp = Instantiate(b);
             temp.transform.position = startPos += new Vector3(offsetX, 0, offsetZ);
             temp.transform.SetParent(world.transform);
-            temp.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+            temp.transform.localScale = new Vector3(0.1f    , 0.1f, 0.1f);
         }
 	}
 	

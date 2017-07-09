@@ -104,31 +104,7 @@ public class MouseManager : MonoBehaviour {
 
     void UpdatePanel()
     {
-        // FIND BETTER SOLUTION
-
-        GameObject activePanel = null;
-
-        if (selectedObject == previousSelectedObject) return;
-        if (selectedObject == null)
-        {
-            panels.TryGetValue(PANELS.BUILDER, out activePanel);
-        }
-        else { 
-            
-            if(selectedObject.GetComponent<Unit>() != null)
-            {
-                panels.TryGetValue(PANELS.UNIT, out activePanel);
-                activePanel.GetComponent<UIUnitManager>().unit = selectedObject.GetComponent<Unit>();
-            } else if (selectedObject.GetComponent<Building>() != null)
-            {
-                panels.TryGetValue(PANELS.BUILDING, out activePanel);
-                activePanel.GetComponent<UIBuildingManager>().building = selectedObject.GetComponent<Building>();
-            } else
-            {
-                panels.TryGetValue(PANELS.BUILDER, out activePanel);
-            }
-        }
-        uiManager.ReplacePanel(activePanel);
+        uiManager.ReplacePanel(selectedObject.GetComponent<Selectable>().uiPanel);
     }
 
     //Color SetColor(GameObject obj, Color c)

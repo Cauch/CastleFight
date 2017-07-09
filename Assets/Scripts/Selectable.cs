@@ -5,4 +5,5 @@ using UnityEngine;
 public abstract class Selectable : MonoBehaviour {
     public bool isSelected = false;
     public bool isActive = false;
+    public GameObject uiPanel;
 }

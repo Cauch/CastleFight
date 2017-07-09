@@ -10,8 +10,10 @@ public class UnitBuilding : Building {
     float loading;
 
     // Use this for initialization
-    void Start () {
+    new void Start () {
         world = GameObject.FindGameObjectWithTag("World").transform;
+
+        base.Start();
 	}
 
     // Update is called once per frame
