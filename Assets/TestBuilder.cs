@@ -7,6 +7,10 @@ public class TestBuilder : MonoBehaviour {
     public List<GameObject> gObjects;
     public List<Vector3> positions;
     public GameObject uiManager;
+    public GameObject mouseManager;
+    public GameObject indicator;
+    public GameObject player;
+    public Vector3 playerPos;
 
     GameObject world;
 	// Use this for initialization
@@ -20,8 +24,23 @@ public class TestBuilder : MonoBehaviour {
             try { go.transform.position = positions[i]; } catch (Exception e) { Debug.Log(e); }
         }
 
+        GameObject p = Instantiate(player);
+        p.transform.SetParent(world.transform);
+        p.transform.localScale = player.transform.localScale;
+        p.transform.position = playerPos;
+
         //Code dégueulasse
-        uiManager.GetComponent<UIManager>().defaultPanel = gObjects[2];
+        uiManager.GetComponent<UIManager>().defaultPanel = p.GetComponent<Builder>().uiPanel;
+        
+
+        uiManager = Instantiate(uiManager);
+
+        mouseManager.GetComponent<MouseManager>().defaultSelection = p;
+        mouseManager.GetComponent<MouseManager>().uiManager = uiManager.GetComponent<UIManager>();
+
+        Instantiate(mouseManager);
+
+        Instantiate(indicator);
     }
 	
 	// Update is called once per frame

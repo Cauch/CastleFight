@@ -6,9 +6,10 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour {
     GameObject currentPanel;
     public GameObject defaultPanel;
-    public GameObject canvas;
+    GameObject canvas;
 	// Use this for initialization
 	void Start () {
+        canvas = GameObject.FindGameObjectWithTag("Canvas");
         this.currentPanel = Instantiate(defaultPanel);
 	}
 	

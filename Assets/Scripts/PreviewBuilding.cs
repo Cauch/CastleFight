@@ -34,8 +34,11 @@ public class PreviewBuilding : MonoBehaviour {
 
         if (planeCollider.Raycast(ray, out hitInfo, 1000f))
         {
-            buildingPreview.transform.position = hitInfo.point;
-           
+            //Height doesn't seem to be the right thing
+            //float higheThanGround = buildingPreview.GetComponent<CapsuleCollider>().height;
+
+            float higherThanGround = 20f;
+            buildingPreview.transform.position = hitInfo.point + new Vector3(0, higherThanGround,0);
         }
     }
 
@@ -75,7 +78,6 @@ public class PreviewBuilding : MonoBehaviour {
             Destroy(buildingPreview);
             GameObject newBuilding = builder.InstantiateBuilding(buildingTemplate);
             newBuilding.transform.SetParent(world.transform);
-            newBuilding.transform.SetParent(world.transform);
             newBuilding.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
             
             Destroy(buildingPreview);
@@ -95,6 +97,7 @@ public class PreviewBuilding : MonoBehaviour {
         buildingPreview = buildingTemplate;
         isLegitPlacement = false;
         buildingPreview = Instantiate(buildingTemplate);
+        Destroy(buildingPreview.GetComponent<Rigidbody>());
         Building preview = buildingPreview.GetComponent<Building>();
         preview.isActive = false;
         buildingPreview.transform.SetParent(world.transform);

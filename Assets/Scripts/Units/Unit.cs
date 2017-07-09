@@ -50,7 +50,7 @@ public class Unit : Attackable {
     Vector3 PathFind()
     {
         Vector3 dir = (target.transform.position - this.transform.position);
-        dir.y = 0;
+       
         return dir.normalized;
     }
 

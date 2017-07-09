@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 using System.IO;
 
 public class MouseManager : MonoBehaviour {
-    enum PANELS { UNIT, BUILDING, BUILDER};
+    const int LEFT_CLICK = 0;
 
     public GameObject defaultSelection;
     public GameObject hoveredObject;
@@ -16,21 +16,11 @@ public class MouseManager : MonoBehaviour {
     public GameObject thrashCode;
     public UIManager uiManager;
 
-    Dictionary<PANELS, GameObject> panels;
-
-    public List<GameObject> panelList;
-
     const int UI_POINTER = -1;
 
     // Use this for initialization
     void Start () {
-        panels = new Dictionary<PANELS, GameObject>();
-
-        panels.Add(PANELS.UNIT, panelList[0]);
-        panels.Add(PANELS.BUILDING, panelList[1]);
-        panels.Add(PANELS.BUILDER, panelList[2]);
-
-        selectedObject = previousSelectedObject = defaultSelection;
+        selectedObject = previousSelectedObject = hoveredObject = defaultSelection;
     }
 
     // Update is called once per frame
@@ -44,7 +34,7 @@ public class MouseManager : MonoBehaviour {
             LookForHover();
             LookForSelect();
         }
-        if(selectedObject == previousSelectedObject) { } else
+        if(selectedObject != previousSelectedObject)
         {
             UpdatePanel();
         }
@@ -69,7 +59,7 @@ public class MouseManager : MonoBehaviour {
     
     void LookForSelect()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(LEFT_CLICK))
         {
             if (selectedObject == hoveredObject)
             {
@@ -99,7 +89,7 @@ public class MouseManager : MonoBehaviour {
         
         Selectable s = obj.GetComponent<Selectable>();
         if (s != null) s.isSelected = false;
-        obj = null;
+        obj = defaultSelection;
     }
 
     void UpdatePanel()

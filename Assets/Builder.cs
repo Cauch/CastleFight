@@ -23,7 +23,7 @@ public class Builder : Selectable {
 
     private void Start()
     {
-        uiPanel.GetComponent<UIBuilderManager>().builder     = this;
+        uiPanel.GetComponent<UIBuilderManager>().builder = this;
         this.ownedBuildings = new List<GameObject>();
         this.money = 100;
         this.income = 10f;
