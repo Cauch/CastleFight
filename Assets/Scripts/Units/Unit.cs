@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Unit : Attackable {
     Attackable enemyCastle;
@@ -13,6 +15,7 @@ public class Unit : Attackable {
     public float speed;
 
     List<Attackable> enemies;
+    NavMeshAgent navMesh;
 
     void Start()
     {
@@ -20,6 +23,8 @@ public class Unit : Attackable {
         this.enemyCastle = this.allegiance == false ?  GameObject.FindGameObjectWithTag("Castle1").GetComponent<Attackable>() : GameObject.FindGameObjectWithTag("Castle0").GetComponent<Attackable>();
         target = enemyCastle;
         enemies = new List<Attackable>();
+        navMesh = GetComponent<NavMeshAgent>();
+        navMesh.speed = this.speed;
     }
 
     new void Update()
@@ -32,7 +37,6 @@ public class Unit : Attackable {
             DetectEnemies();
             if (!AttackTarget()) {
                 Move();
-            } else {
             }
         }
     }
@@ -42,22 +46,17 @@ public class Unit : Attackable {
         isActive = true;
     }
 
-    void Move()
+    protected void Move()
     {
-        this.transform.position += PathFind() * speed * Time.deltaTime;
-    }
-
-    Vector3 PathFind()
-    {
-        Vector3 dir = (target.transform.position - this.transform.position);
-       
-        return dir.normalized;
+        //Underlying problem: procs error each time they switch direction
+        try { navMesh.SetDestination(target.transform.position); } catch(Exception e) { Debug.Log("Achale moi pas avec ca"); }
     }
 
     float DetectEnemies()
     {
         Collider[] enemiesCollider = Physics.OverlapSphere(this.transform.position, detectionRange);
         this.enemies.Clear();
+
         foreach(Collider c in enemiesCollider)
         {
             if(IsEnemy(c))

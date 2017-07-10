@@ -34,11 +34,7 @@ public class PreviewBuilding : MonoBehaviour {
 
         if (planeCollider.Raycast(ray, out hitInfo, 1000f))
         {
-            //Height doesn't seem to be the right thing
-            //float higheThanGround = buildingPreview.GetComponent<CapsuleCollider>().height;
-
-            float higherThanGround = 20f;
-            buildingPreview.transform.position = hitInfo.point + new Vector3(0, higherThanGround,0);
+            buildingPreview.transform.position = hitInfo.point;
         }
     }
 
