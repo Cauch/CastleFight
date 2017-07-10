@@ -11,10 +11,11 @@ public class UIManager : MonoBehaviour {
 	void Start () {
         canvas = GameObject.FindGameObjectWithTag("Canvas");
         this.currentPanel = Instantiate(defaultPanel);
-	}
-	
-	// Update is called once per frame
-	void Update () {
+        this.currentPanel.transform.SetParent(canvas.transform);
+    }
+
+    // Update is called once per frame
+    void Update () {
 		
 	}
 
