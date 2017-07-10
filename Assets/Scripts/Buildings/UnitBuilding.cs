@@ -32,7 +32,7 @@ public class UnitBuilding : Building {
     {
         if(maxTime <= loading)
         {
-            GameObject unit = Instantiate(prefabUnit);
+            GameObject unit = Instantiate(prefabUnit, this.transform.position, Quaternion.identity);
             loading = 0f;
 
             unit.transform.SetParent(world.transform, false);
@@ -43,7 +43,7 @@ public class UnitBuilding : Building {
 
     Vector3 findRoomForUnit()
     {
-        return this.transform.position + new Vector3 ( 30, 0, 0 );
+        return this.transform.position;
     }
 
 }
