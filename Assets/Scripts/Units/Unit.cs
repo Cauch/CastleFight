@@ -49,7 +49,7 @@ public class Unit : Attackable {
     protected void Move()
     {
         //Underlying problem: procs error each time they switch direction
-        try { navMesh.SetDestination(target.transform.position); } catch(Exception e) { Debug.Log("Achale moi pas avec ca"); }
+        navMesh.SetDestination(target.transform.position);
     }
 
     float DetectEnemies()
@@ -79,7 +79,7 @@ public class Unit : Attackable {
     float GetClosestEnemy()
     {
         this.target = this.enemyCastle;
-        float closestDistanceSqr = Mathf.Infinity;
+        float closestDistanceSqr = detectionRange;
         Vector3 currentPosition = this.transform.position;
         foreach (Attackable potentialTarget in enemies)
         {
