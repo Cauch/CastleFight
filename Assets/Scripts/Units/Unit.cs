@@ -4,30 +4,35 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Unit : Attackable {
+public abstract class Unit : Attackable {
     Attackable enemyCastle;
     Attackable target;
     float attackCooldown;
     public float attackSpeed;
     public float dammage;
     public float detectionRange;
-    public float attackRange;
-    public float speed;
+    public float defaultAttackRange;
+
+    public float defaultSpeed;
+    protected float speedModifier;
 
     List<Attackable> enemies;
-    NavMeshAgent navMesh;
 
-    void Start()
+    new protected void Start()
     {
         uiPanel.GetComponent<UIUnitManager>().unit = this;
-        this.enemyCastle = this.allegiance == false ?  GameObject.FindGameObjectWithTag("Castle1").GetComponent<Attackable>() : GameObject.FindGameObjectWithTag("Castle0").GetComponent<Attackable>();
         target = enemyCastle;
         enemies = new List<Attackable>();
-        navMesh = GetComponent<NavMeshAgent>();
-        navMesh.speed = this.speed;
     }
 
-    new void Update()
+    public void AdjustStart()
+    {
+        this.allegiance = this.creator.allegiance;
+        this.enemyCastle = this.allegiance == false ? GameObject.FindGameObjectWithTag("Castle1").GetComponent<Attackable>() : GameObject.FindGameObjectWithTag("Castle0").GetComponent<Attackable>();
+
+    }
+
+    protected virtual new void Update()
     {
         base.Update();
         if (isActive)
@@ -36,7 +41,7 @@ public class Unit : Attackable {
 
             DetectEnemies();
             if (!AttackTarget()) {
-                Move();
+                Move(target);
             }
         }
     }
@@ -46,11 +51,7 @@ public class Unit : Attackable {
         isActive = true;
     }
 
-    protected void Move()
-    {
-        //Underlying problem: procs error each time they switch direction
-        navMesh.SetDestination(target.transform.position);
-    }
+    protected abstract void Move(Attackable target);
 
     float DetectEnemies()
     {
@@ -97,7 +98,7 @@ public class Unit : Attackable {
 
     bool AttackTarget()
     {
-        bool targetInRange = (target.transform.position - this.transform.position).sqrMagnitude <= attackRange;
+        bool targetInRange = (target.transform.position - this.transform.position).sqrMagnitude <= defaultAttackRange;
         if (this.attackCooldown <= 0 && targetInRange)
         {
             attackCooldown = 1;

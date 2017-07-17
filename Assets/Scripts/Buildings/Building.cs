@@ -11,6 +11,11 @@ public abstract class Building : Attackable {
         uiPanel.GetComponent<UIBuildingManager>().building = this;
     }
 
+    public void AdjustStart()
+    {
+        this.allegiance = this.creator.allegiance;
+    }
+
     new void Update()
     {
         base.Update();

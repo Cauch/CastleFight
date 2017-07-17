@@ -12,14 +12,13 @@ public class UnitBuilding : Building {
     // Use this for initialization
     new void Start () {
         world = GameObject.FindGameObjectWithTag("World").transform;
-
         base.Start();
 	}
 
     // Update is called once per frame
     new void Update()
     {
-        if (isActive)
+        if (isActive)   
         {
             base.Update();
             loading += Time.deltaTime;
@@ -36,12 +35,16 @@ public class UnitBuilding : Building {
             loading = 0f;
 
             unit.transform.SetParent(world.transform, false);
-            unit.transform.position = findRoomForUnit();
+            unit.transform.position = FindRoomForUnit();
             unit.GetComponent<Unit>().isActive = true;
+
+            Unit unitComp = unit.GetComponent<Unit>();
+            unitComp.creator = creator;
+            unitComp.AdjustStart();
         }
     }
 
-    Vector3 findRoomForUnit()
+    Vector3 FindRoomForUnit()
     {
         return this.transform.position;
     }
