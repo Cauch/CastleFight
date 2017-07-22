@@ -4,40 +4,57 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Unit : Attackable {
+public abstract class Unit : Attackable {
+    const float BASE_GLOBAL_COOLDOWN = 0.2f;
+    float globalCooldown = BASE_GLOBAL_COOLDOWN;
+
     Attackable enemyCastle;
     Attackable target;
-    float attackCooldown;
-    public float attackSpeed;
-    public float dammage;
     public float detectionRange;
-    public float attackRange;
-    public float speed;
+
+    public Skill[] offensiveSkills;
+    public Skill[] defensiveSkills;
+
+    public float defaultSpeed;
+    protected float speedModifier;
 
     List<Attackable> enemies;
-    NavMeshAgent navMesh;
 
-    void Start()
+    new protected void Start()
     {
+        base.Start();
         uiPanel.GetComponent<UIUnitManager>().unit = this;
-        this.enemyCastle = this.allegiance == false ?  GameObject.FindGameObjectWithTag("Castle1").GetComponent<Attackable>() : GameObject.FindGameObjectWithTag("Castle0").GetComponent<Attackable>();
         target = enemyCastle;
         enemies = new List<Attackable>();
-        navMesh = GetComponent<NavMeshAgent>();
-        navMesh.speed = this.speed;
+        offensiveSkills = this.GetComponents<Skill>();
     }
 
-    new void Update()
+    public void AdjustStart()
+    {
+        this.allegiance = this.creator.allegiance;
+        this.enemyCastle = this.allegiance == false ? GameObject.FindGameObjectWithTag("Castle1").GetComponent<Attackable>() : GameObject.FindGameObjectWithTag("Castle0").GetComponent<Attackable>();
+
+    }
+
+    protected virtual new void Update()
     {
         base.Update();
         if (isActive)
         {
-            attackCooldown -= Time.deltaTime * attackSpeed;
+            RefreshCooldown();
 
-            DetectEnemies();
-            if (!AttackTarget()) {
-                Move();
-            }
+            // Any action should reset globalCooldown
+            if(globalCooldown <= 0)
+            {
+                DetectEnemies();
+                if (UseOffensiveSkill())
+                {
+                    StopMoving();
+                } else
+                {
+                    Move(target);
+                }
+            }      
         }
     }
 
@@ -46,11 +63,9 @@ public class Unit : Attackable {
         isActive = true;
     }
 
-    protected void Move()
-    {
-        //Underlying problem: procs error each time they switch direction
-        navMesh.SetDestination(target.transform.position);
-    }
+    protected abstract void Move(Attackable target);
+    protected abstract void StopMoving();
+
 
     float DetectEnemies()
     {
@@ -95,14 +110,59 @@ public class Unit : Attackable {
         return closestDistanceSqr;
     }
 
-    bool AttackTarget()
+    bool UseOffensiveSkill()
     {
-        bool targetInRange = (target.transform.position - this.transform.position).sqrMagnitude <= attackRange;
-        if (this.attackCooldown <= 0 && targetInRange)
+        bool atLeastOneTargetInRange = false;
+        foreach (OffensiveSkill skill in offensiveSkills)
         {
-            attackCooldown = 1;
-            target.hp -= this.dammage;
+            bool targetInRange = (target.transform.position - this.transform.position).sqrMagnitude <= skill.range ;
+            atLeastOneTargetInRange = atLeastOneTargetInRange || targetInRange ;
+            if (skill.cooldown <= 0 && targetInRange)
+            {
+                skill.ApplyOnTarget(target);
+                skill.cooldown = 1;
+
+
+                return targetInRange;
+            }
+
+            
         }
-        return targetInRange;
+        return atLeastOneTargetInRange;
+    }
+
+    bool UseDefensiveSkill()
+    {
+        foreach (Skill skill in defensiveSkills)
+        {
+            bool targetInRange = (target.transform.position - this.transform.position).sqrMagnitude <= skill.range;
+            if (skill.cooldown <= 0 && targetInRange)
+            {
+                skill.ApplyOnTarget(target);
+                skill.cooldown = 1;
+
+                globalCooldown = BASE_GLOBAL_COOLDOWN;
+
+                return targetInRange;
+            }
+
+
+        }
+        return false;
+    }
+
+    void RefreshCooldown()
+    {
+        foreach (Skill skill in offensiveSkills)
+        {
+                skill.cooldown -= Time.deltaTime * skill.skillRefreshSpeed;
+        }
+
+        foreach (Skill skill in defensiveSkills)
+        {
+            skill.cooldown -= Time.deltaTime * skill.skillRefreshSpeed;
+        }
+
+        globalCooldown -= Time.deltaTime;
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PreviewBuilding : MonoBehaviour {
@@ -40,7 +41,22 @@ public class PreviewBuilding : MonoBehaviour {
 
     void UpdateLegitPlacement()
     {
-        isLegitPlacement = true;
+        Bounds bounds = buildingPreview.GetComponent<Collider>().bounds;
+
+        Collider[] colliders = Physics.OverlapBox(bounds.center, bounds.extents/2);
+        Collider me = buildingPreview.GetComponent<Collider>();
+       
+        foreach (Collider c in colliders)
+        {
+            if (!(c.GetComponent<Selectable>() == null || c.Equals(me)) || c.tag == "Obstacle") 
+            {
+                isLegitPlacement = false;
+                return;
+            }
+        }
+
+
+        isLegitPlacement = colliders.AsQueryable().Contains(BuildZone());
     }
 
     void UpdateColor()
@@ -98,5 +114,14 @@ public class PreviewBuilding : MonoBehaviour {
         preview.isActive = false;
         buildingPreview.transform.SetParent(world.transform);
         buildingPreview.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+    }
+
+    Collider BuildZone()
+    {
+        Selectable s = builder.GetComponent<Selectable>();
+
+        Collider col = GameObject.FindGameObjectWithTag(s.allegiance ? "BuildZone1" : "BuildZone0").GetComponent<Collider>();
+    
+        return col;
     }
 }

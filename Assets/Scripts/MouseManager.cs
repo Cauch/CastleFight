@@ -21,6 +21,7 @@ public class MouseManager : MonoBehaviour {
     // Use this for initialization
     void Start () {
         selectedObject = previousSelectedObject = hoveredObject = defaultSelection;
+        UpdatePanel();
     }
 
     // Update is called once per frame

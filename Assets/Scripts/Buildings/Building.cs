@@ -6,9 +6,15 @@ public abstract class Building : Attackable {
     public float income;
     public uint cost;
 
-    protected void Start()
+    new protected void Start()
     {
+        base.Start();
         uiPanel.GetComponent<UIBuildingManager>().building = this;
+    }
+
+    public void AdjustStart()
+    {
+        this.allegiance = this.creator.allegiance;
     }
 
     new void Update()

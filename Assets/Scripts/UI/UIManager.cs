@@ -20,10 +20,11 @@ public class UIManager : MonoBehaviour {
 	}
 
     public void ReplacePanel(GameObject panel)
-    {
-        if (currentPanel.Equals(panel)) return;
-        Destroy(currentPanel);  
-        this.currentPanel = Instantiate(panel);
-        this.currentPanel.transform.SetParent(canvas.transform);
+    {   
+        this.currentPanel.SetActive(false);
+        this.currentPanel = (panel);
+        this.currentPanel.SetActive(true);
+        this.currentPanel.transform.SetParent(canvas.transform); // Could be placed at the instantiation of the panels
+        
     }
 }
