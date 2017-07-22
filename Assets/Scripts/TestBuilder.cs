@@ -9,12 +9,12 @@ public class TestBuilder : MonoBehaviour {
     public GameObject uiManager;
     public GameObject mouseManager;
     public GameObject indicator;
-    public GameObject player;
-    public Vector3 playerPos;
+    public List<GameObject> players;
+    public List<Vector3> playerPosList;
 
     GameObject world;
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start() {
         world = GameObject.FindGameObjectWithTag("World");
         for (int i = 0; i < gObjects.Count; i++)
         {
@@ -24,9 +24,18 @@ public class TestBuilder : MonoBehaviour {
             try { go.transform.position = positions[i]; } catch (Exception e) { Debug.Log(e); }
         }
 
-        GameObject playerInstance = Instantiate(player, playerPos, Quaternion.identity);
-        playerInstance.transform.SetParent(world.transform);
-        playerInstance.transform.localScale = player.transform.localScale;
+
+        GameObject playerInstance = null;
+
+        for (int i = 0; i < players.Count; i++)
+        {
+            GameObject player = players[i];
+            Vector3 playerPos = playerPosList[i];
+            playerInstance = Instantiate(player, playerPos, Quaternion.identity);
+            playerInstance.transform.SetParent(world.transform);
+            playerInstance.transform.localScale = player.transform.localScale;
+        }
+
 
         //Code dégueulasse
         uiManager.GetComponent<UIManager>().defaultPanel = playerInstance.GetComponent<Builder>().uiPanel;

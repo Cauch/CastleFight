@@ -29,12 +29,14 @@ public class Builder : Selectable {
         money -= cost;
     }
 
-    private void Start()
+    new private void Start()
     {
+        base.Start();
+        this.uiPanel.GetComponent<UIBuilderManager>().builder = this;
         planeCollider = GameObject.FindGameObjectWithTag("Plane").GetComponent<Collider>();
         navMesh = GetComponent<NavMeshAgent>();
         navMesh.speed = 1000;
-        uiPanel.GetComponent<UIBuilderManager>().builder = this;
+        uiPanel.GetComponent<UIBuilderManager>();
         this.ownedBuildings = new List<GameObject>();
         this.money = 100;
         this.income = 10f;
@@ -45,18 +47,11 @@ public class Builder : Selectable {
     protected void Update()
     {
         cooldown -= Time.deltaTime;
-        //UpdateIncome();
         if (cooldown < 0)
         {
-            cooldown = incomeTime; // Observer incomeTime?
+            cooldown = incomeTime; // Observer pattern for income?
             UpdateMoney();
         }
-
-        if(Input.GetMouseButtonDown(RIGHT_CLICK)) {
-            GetDestination();
-            Move(destination);
-        }
-       
     }
 
     void GetDestination()
@@ -93,20 +88,6 @@ public class Builder : Selectable {
         Destroy(building);
         income -= ownedBuildings[ownedBuildings.Count - 1].GetComponent<Building>().income;
     }
-
-    //void UpdateIncome()
-    //{
-    //    float income = 0;
-    //    foreach(GameObject b in buildings)
-    //    {
-    //        income += b.GetComponent<Building>().income;
-    //    }
-    //    foreach (Building b in ownedBuildings)
-    //    {
-    //        income += b.income;
-    //    }
-    //    income = Mathf.Clamp(income, 0, Mathf.Infinity);
-    //}
 
     void UpdateMoney()
     {

@@ -21,5 +21,12 @@ public class GroundUnit : Unit {
     protected override void Move(Attackable target)
     {
         navMesh.SetDestination(target.transform.position);
+        navMesh.isStopped = false;
+
+    }
+
+    protected override void StopMoving()
+    {
+        navMesh.isStopped = true;
     }
 }

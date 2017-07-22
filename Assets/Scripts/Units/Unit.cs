@@ -5,13 +5,15 @@ using UnityEngine;
 using UnityEngine.AI;
 
 public abstract class Unit : Attackable {
+    const float BASE_GLOBAL_COOLDOWN = 0.2f;
+    float globalCooldown = BASE_GLOBAL_COOLDOWN;
+
     Attackable enemyCastle;
     Attackable target;
-    float attackCooldown;
-    public float attackSpeed;
-    public float dammage;
     public float detectionRange;
-    public float defaultAttackRange;
+
+    public Skill[] offensiveSkills;
+    public Skill[] defensiveSkills;
 
     public float defaultSpeed;
     protected float speedModifier;
@@ -20,9 +22,11 @@ public abstract class Unit : Attackable {
 
     new protected void Start()
     {
+        base.Start();
         uiPanel.GetComponent<UIUnitManager>().unit = this;
         target = enemyCastle;
         enemies = new List<Attackable>();
+        offensiveSkills = this.GetComponents<Skill>();
     }
 
     public void AdjustStart()
@@ -37,12 +41,20 @@ public abstract class Unit : Attackable {
         base.Update();
         if (isActive)
         {
-            attackCooldown -= Time.deltaTime * attackSpeed;
+            RefreshCooldown();
 
-            DetectEnemies();
-            if (!AttackTarget()) {
-                Move(target);
-            }
+            // Any action should reset globalCooldown
+            if(globalCooldown <= 0)
+            {
+                DetectEnemies();
+                if (UseOffensiveSkill())
+                {
+                    StopMoving();
+                } else
+                {
+                    Move(target);
+                }
+            }      
         }
     }
 
@@ -52,6 +64,8 @@ public abstract class Unit : Attackable {
     }
 
     protected abstract void Move(Attackable target);
+    protected abstract void StopMoving();
+
 
     float DetectEnemies()
     {
@@ -96,14 +110,59 @@ public abstract class Unit : Attackable {
         return closestDistanceSqr;
     }
 
-    bool AttackTarget()
+    bool UseOffensiveSkill()
     {
-        bool targetInRange = (target.transform.position - this.transform.position).sqrMagnitude <= defaultAttackRange;
-        if (this.attackCooldown <= 0 && targetInRange)
+        bool atLeastOneTargetInRange = false;
+        foreach (OffensiveSkill skill in offensiveSkills)
         {
-            attackCooldown = 1;
-            target.hp -= this.dammage;
+            bool targetInRange = (target.transform.position - this.transform.position).sqrMagnitude <= skill.range ;
+            atLeastOneTargetInRange = atLeastOneTargetInRange || targetInRange ;
+            if (skill.cooldown <= 0 && targetInRange)
+            {
+                skill.ApplyOnTarget(target);
+                skill.cooldown = 1;
+
+
+                return targetInRange;
+            }
+
+            
         }
-        return targetInRange;
+        return atLeastOneTargetInRange;
+    }
+
+    bool UseDefensiveSkill()
+    {
+        foreach (Skill skill in defensiveSkills)
+        {
+            bool targetInRange = (target.transform.position - this.transform.position).sqrMagnitude <= skill.range;
+            if (skill.cooldown <= 0 && targetInRange)
+            {
+                skill.ApplyOnTarget(target);
+                skill.cooldown = 1;
+
+                globalCooldown = BASE_GLOBAL_COOLDOWN;
+
+                return targetInRange;
+            }
+
+
+        }
+        return false;
+    }
+
+    void RefreshCooldown()
+    {
+        foreach (Skill skill in offensiveSkills)
+        {
+                skill.cooldown -= Time.deltaTime * skill.skillRefreshSpeed;
+        }
+
+        foreach (Skill skill in defensiveSkills)
+        {
+            skill.cooldown -= Time.deltaTime * skill.skillRefreshSpeed;
+        }
+
+        globalCooldown -= Time.deltaTime;
     }
 }

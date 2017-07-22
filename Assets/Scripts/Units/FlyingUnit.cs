@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,8 +22,14 @@ public class FlyingUnit : Unit {
         this.transform.position += direction * defaultSpeed;
     }
 
+
+    protected override void StopMoving(){ 
+        //Do nothing
+    }
+
     void SetHeight()
     {
         this.transform.position = this.isActive ? new Vector3(this.transform.position.x, 100f, this.transform.position.z) : new Vector3(this.transform.position.x, 3f, this.transform.position.z);
     }
+
 }

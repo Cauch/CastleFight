@@ -25,8 +25,6 @@ public class UIUnitManager : MonoBehaviour
         {
             hpText.text = unit.hp.ToString() + "/" + unit.maxHp.ToString();
             armorText.text = unit.armor.ToString();
-            attackText.text = unit.attackSpeed.ToString();
-            attackSpeedText.text = unit.dammage.ToString();
         }
 
     }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIBuildingManager : MonoBehaviour
+public class UIBuildingManager : UIItemManager
 {
     public Text hpText;
     public Text armorText;  
@@ -17,7 +17,6 @@ public class UIBuildingManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         if (building != null)
         {
             hpText.text = building.hp.ToString() + "/" + building.maxHp.ToString();
