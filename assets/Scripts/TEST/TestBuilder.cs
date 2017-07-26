@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class TestBuilder : MonoBehaviour {
-    public List<GameObject> gObjects;
-    public List<Vector3> positions;
+   
     public GameObject uiManager;
     public GameObject mouseManager;
     public GameObject indicator;
     public List<GameObject> players;
     public List<Vector3> playerPosList;
+    public List<GameObject> gObjects;
+    public List<Vector3> gObjectsPosList;
 
     GameObject world;
     // Use this for initialization
@@ -21,7 +22,7 @@ public class TestBuilder : MonoBehaviour {
             GameObject go = Instantiate(gObjects[i]);
             go.transform.SetParent(world.transform);
             go.transform.localScale = gObjects[i].transform.localScale;
-            try { go.transform.position = positions[i]; } catch (Exception e) { Debug.Log(e); }
+            try { go.transform.position = gObjectsPosList[i]; } catch (Exception e) { Debug.Log(e); }
         }
 
 

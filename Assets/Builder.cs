@@ -21,8 +21,9 @@ public class Builder : Selectable {
         money -= cost;
     }
 
-    private void Start()
+    new private void Start()
     {
+        base.Start();
         uiPanel.GetComponent<UIBuilderManager>().builder = this;
         this.ownedBuildings = new List<GameObject>();
         this.money = 100;

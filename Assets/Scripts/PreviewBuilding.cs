@@ -91,7 +91,7 @@ public class PreviewBuilding : MonoBehaviour {
             GameObject newBuilding = builder.InstantiateBuilding(buildingTemplate);
             newBuilding.transform.SetParent(world.transform);
             newBuilding.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-            
+            newBuilding.GetComponent<Building>().creator = builder;
             Destroy(buildingPreview);
             Destroy(this.gameObject);
         }
