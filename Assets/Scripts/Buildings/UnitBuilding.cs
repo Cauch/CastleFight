@@ -5,6 +5,7 @@ using UnityEngine;
 public class UnitBuilding : Building {
     public float maxTime;
     public GameObject prefabUnit;
+    public bool spawnAtCreation;
     Transform world;
 
     float loading;
@@ -13,6 +14,10 @@ public class UnitBuilding : Building {
     new void Start () {
         world = GameObject.FindGameObjectWithTag("World").transform;
         base.Start();
+        if(spawnAtCreation && isActive)
+        {
+            ProduceUnit();
+        }
 	}
 
     // Update is called once per frame
@@ -31,17 +36,22 @@ public class UnitBuilding : Building {
     {
         if(maxTime <= loading)
         {
-            GameObject unit = Instantiate(prefabUnit, this.transform.position, Quaternion.identity);
-            loading = 0f;
-
-            unit.transform.SetParent(world.transform, false);
-            unit.transform.position = FindRoomForUnit();
-            unit.GetComponent<Unit>().isActive = true;
-
-            Unit unitComp = unit.GetComponent<Unit>();
-            unitComp.creator = creator;
-            unitComp.AdjustStart();
+            ProduceUnit();
         }
+    }
+
+    void ProduceUnit()
+    {
+        GameObject unit = Instantiate(prefabUnit, this.transform.position, Quaternion.identity);
+        loading = 0f;
+
+        unit.transform.SetParent(world.transform, false);
+        unit.transform.position = FindRoomForUnit();
+        unit.GetComponent<Unit>().isActive = true;
+
+        Unit unitComp = unit.GetComponent<Unit>();
+        unitComp.creator = creator;
+        unitComp.AdjustStart();
     }
 
     Vector3 FindRoomForUnit()

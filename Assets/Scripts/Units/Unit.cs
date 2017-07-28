@@ -6,7 +6,10 @@ using UnityEngine.AI;
 
 public abstract class Unit : Attackable {
     const float BASE_GLOBAL_COOLDOWN = 0.2f;
+    const float ANIMATOR_SPEED_MODIFIER = 0.02f;
     float globalCooldown = BASE_GLOBAL_COOLDOWN;
+
+    Animator animator;
 
     Attackable enemyCastle;
     Attackable target;
@@ -23,6 +26,7 @@ public abstract class Unit : Attackable {
     new protected void Start()
     {
         base.Start();
+        animator = this.GetComponent<Animator>();
         uiPanel.GetComponent<UIUnitManager>().unit = this;
         target = enemyCastle;
         enemies = new List<Attackable>();
@@ -33,7 +37,6 @@ public abstract class Unit : Attackable {
     {
         this.allegiance = this.creator.allegiance;
         this.enemyCastle = this.allegiance == false ? GameObject.FindGameObjectWithTag("Castle1").GetComponent<Attackable>() : GameObject.FindGameObjectWithTag("Castle0").GetComponent<Attackable>();
-
     }
 
     protected virtual new void Update()
@@ -42,16 +45,18 @@ public abstract class Unit : Attackable {
         if (isActive)
         {
             RefreshCooldown();
-
             // Any action should reset globalCooldown
             if(globalCooldown <= 0)
             {
                 DetectEnemies();
                 if (UseOffensiveSkill())
                 {
+                    animator.SetBool("isAttacking", true);
                     StopMoving();
                 } else
                 {
+                    animator.speed = defaultSpeed * ANIMATOR_SPEED_MODIFIER;
+                    animator.SetBool("isAttacking", false);
                     Move(target);
                 }
             }      
@@ -113,20 +118,29 @@ public abstract class Unit : Attackable {
     bool UseOffensiveSkill()
     {
         bool atLeastOneTargetInRange = false;
+        Skill chosenSkill = null;
         foreach (OffensiveSkill skill in offensiveSkills)
         {
             bool targetInRange = (target.transform.position - this.transform.position).sqrMagnitude <= skill.range ;
             atLeastOneTargetInRange = atLeastOneTargetInRange || targetInRange ;
-            if (skill.cooldown <= 0 && targetInRange)
+            if(targetInRange)
             {
-                skill.ApplyOnTarget(target);
-                skill.cooldown = 1;
+                chosenSkill = skill;
+                if (skill.cooldown <= 0)
+                {
+                    skill.ApplyOnTarget(target);
+                    skill.cooldown = 1;
+
+                    //Putting attack or spell animation here
 
 
-                return targetInRange;
+                    return targetInRange;
+                }
             }
-
-            
+        }
+        if(atLeastOneTargetInRange)
+        {
+            animator.speed = chosenSkill.skillRefreshSpeed;
         }
         return atLeastOneTargetInRange;
     }

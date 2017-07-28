@@ -22,7 +22,6 @@ public class GroundUnit : Unit {
     {
         navMesh.SetDestination(target.transform.position);
         navMesh.isStopped = false;
-
     }
 
     protected override void StopMoving()

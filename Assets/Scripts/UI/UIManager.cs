@@ -20,11 +20,12 @@ public class UIManager : MonoBehaviour {
 	}
 
     public void ReplacePanel(GameObject panel)
-    {   
+    {
+        Transform test = panel.transform;
         this.currentPanel.SetActive(false);
         this.currentPanel = (panel);
         this.currentPanel.SetActive(true);
-        this.currentPanel.transform.SetParent(canvas.transform); // Could be placed at the instantiation of the panels
-        
+        this.currentPanel.transform.SetParent(canvas.transform,false);// Could be placed at the instantiation of the panels
+        test = panel.transform;
     }
 }
