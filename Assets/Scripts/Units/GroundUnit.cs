@@ -7,7 +7,7 @@ public class GroundUnit : Unit {
     NavMeshAgent navMesh;
 
     // Use this for initialization
-    new void Start () {
+    new protected void Start () {
         base.Start();
         navMesh = GetComponent<NavMeshAgent>();
         navMesh.speed = this.defaultSpeed;

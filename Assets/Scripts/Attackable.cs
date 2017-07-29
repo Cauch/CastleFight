@@ -19,6 +19,7 @@ public abstract class Attackable : Selectable {
     new protected virtual void Start()
     {
         base.Start();
+        effects = new List<Effect>();
     }
 
     protected void Update()

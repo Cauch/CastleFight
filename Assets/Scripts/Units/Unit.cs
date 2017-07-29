@@ -5,38 +5,33 @@ using UnityEngine;
 using UnityEngine.AI;
 
 public abstract class Unit : Attackable {
+    // Private attributes
     const float BASE_GLOBAL_COOLDOWN = 0.2f;
     const float ANIMATOR_SPEED_MODIFIER = 0.02f;
-    float globalCooldown = BASE_GLOBAL_COOLDOWN;
 
     Animator animator;
 
     Attackable enemyCastle;
-    Attackable target;
-    public float detectionRange;
-
-    public Skill[] offensiveSkills;
-    public Skill[] defensiveSkills;
+   
+    // Protected Attributes
+    protected float speedModifier;
+    protected Skill[] offensiveSkills;
+    protected Skill[] defensiveSkills;
 
     public float defaultSpeed;
-    protected float speedModifier;
+    public float detectionRange;
 
-    List<Attackable> enemies;
 
+    // Abstract Methods
+    protected abstract void Move(Attackable target);
+    protected abstract void StopMoving();
+    
+    // Private and protected methods
     new protected void Start()
     {
         base.Start();
         animator = this.GetComponent<Animator>();
         uiPanel.GetComponent<UIUnitManager>().unit = this;
-        target = enemyCastle;
-        enemies = new List<Attackable>();
-        offensiveSkills = this.GetComponents<Skill>();
-    }
-
-    public void AdjustStart()
-    {
-        this.allegiance = this.creator.allegiance;
-        this.enemyCastle = this.allegiance == false ? GameObject.FindGameObjectWithTag("Castle1").GetComponent<Attackable>() : GameObject.FindGameObjectWithTag("Castle0").GetComponent<Attackable>();
     }
 
     protected virtual new void Update()
@@ -44,22 +39,18 @@ public abstract class Unit : Attackable {
         base.Update();
         if (isActive)
         {
-            RefreshCooldown();
-            // Any action should reset globalCooldown
-            if(globalCooldown <= 0)
+            Attackable target = GetClosestEnemy();
+            bool isAttacking = UseOffensiveSkill(target);
+            animator.SetBool("isAttacking", isAttacking);
+
+            if (isAttacking)
             {
-                DetectEnemies();
-                if (UseOffensiveSkill())
-                {
-                    animator.SetBool("isAttacking", true);
-                    StopMoving();
-                } else
-                {
-                    animator.speed = defaultSpeed * ANIMATOR_SPEED_MODIFIER;
-                    animator.SetBool("isAttacking", false);
-                    Move(target);
-                }
-            }      
+                RefreshCooldown();
+                StopMoving();
+            } else
+            {
+                Move(target);
+            }     
         }
     }
 
@@ -68,27 +59,23 @@ public abstract class Unit : Attackable {
         isActive = true;
     }
 
-    protected abstract void Move(Attackable target);
-    protected abstract void StopMoving();
-
-
-    float DetectEnemies()
+    List<Attackable> DetectEnemies()
     {
         Collider[] enemiesCollider = Physics.OverlapSphere(this.transform.position, detectionRange);
-        this.enemies.Clear();
+        List<Attackable> enemies = new List<Attackable>{ };
 
         foreach(Collider c in enemiesCollider)
         {
-            if(IsEnemy(c))
+            if(ColliderIsEnemy(c))
             {
                 enemies.Add(c.gameObject.GetComponent<Attackable>());
             }
         }
 
-        return GetClosestEnemy();
+        return enemies;
     }
 
-    bool IsEnemy(Collider c)
+    bool ColliderIsEnemy(Collider c)
     {
         Attackable a = c.gameObject.GetComponent<Attackable>();
         if (a == null) return false;
@@ -96,87 +83,78 @@ public abstract class Unit : Attackable {
         return a.allegiance != this.allegiance && a.isActive;
     }
 
-    float GetClosestEnemy()
+    Attackable GetClosestEnemy()
     {
-        this.target = this.enemyCastle;
+        Attackable target = this.enemyCastle;
+
         float closestDistanceSqr = detectionRange;
-        Vector3 currentPosition = this.transform.position;
-        foreach (Attackable potentialTarget in enemies)
+
+        foreach (Attackable potentialTarget in DetectEnemies())
         {
-            Vector3 directionToTarget = potentialTarget.transform.position - currentPosition;
+            Vector3 directionToTarget = potentialTarget.transform.position - this.transform.position;
             float dSqrToTarget = directionToTarget.sqrMagnitude;
             if (dSqrToTarget < closestDistanceSqr && potentialTarget.gameObject != this)
             {
                 closestDistanceSqr = dSqrToTarget;
-                this.target = potentialTarget;
+                target = potentialTarget;
             }
         }
 
-        return closestDistanceSqr;
+        return target;
     }
 
-    bool UseOffensiveSkill()
+    //Rework as to have combat engagement system?
+    bool UseOffensiveSkill(Attackable target)
     {
         bool atLeastOneTargetInRange = false;
-        Skill chosenSkill = null;
         foreach (OffensiveSkill skill in offensiveSkills)
         {
-            bool targetInRange = (target.transform.position - this.transform.position).sqrMagnitude <= skill.range ;
+            bool targetInRange = IsUsable(skill, target);
             atLeastOneTargetInRange = atLeastOneTargetInRange || targetInRange ;
             if(targetInRange)
             {
-                chosenSkill = skill;
                 if (skill.cooldown <= 0)
                 {
-                    skill.ApplyOnTarget(target);
-                    skill.cooldown = 1;
-
-                    //Putting attack or spell animation here
-
-
+                    UseSkill(skill, target);
                     return targetInRange;
                 }
             }
         }
-        if(atLeastOneTargetInRange)
-        {
-            animator.speed = chosenSkill.skillRefreshSpeed;
-        }
+
         return atLeastOneTargetInRange;
     }
 
-    bool UseDefensiveSkill()
+    bool IsUsable(Skill skill, Attackable target)
     {
-        foreach (Skill skill in defensiveSkills)
-        {
-            bool targetInRange = (target.transform.position - this.transform.position).sqrMagnitude <= skill.range;
-            if (skill.cooldown <= 0 && targetInRange)
-            {
-                skill.ApplyOnTarget(target);
-                skill.cooldown = 1;
-
-                globalCooldown = BASE_GLOBAL_COOLDOWN;
-
-                return targetInRange;
-            }
-
-
-        }
-        return false;
+        return skill.IsUsable(this, target);
     }
+
+    void UseSkill(Skill skill, Attackable target)
+    {
+        skill.ApplyOnTarget(target);
+
+        skill.cooldown = 1.0f;
+        animator.SetFloat("attackSpeed", skill.skillRefreshSpeed);
+    }
+
 
     void RefreshCooldown()
     {
         foreach (Skill skill in offensiveSkills)
         {
-                skill.cooldown -= Time.deltaTime * skill.skillRefreshSpeed;
+                skill.cooldown -= (Time.deltaTime * skill.skillRefreshSpeed);
         }
 
         foreach (Skill skill in defensiveSkills)
         {
-            skill.cooldown -= Time.deltaTime * skill.skillRefreshSpeed;
+            skill.cooldown -= (Time.deltaTime * skill.skillRefreshSpeed);
         }
+    }
 
-        globalCooldown -= Time.deltaTime;
+    //Punlic methods
+    public void AdjustStart()
+    {
+        this.allegiance = this.creator.allegiance;
+        this.enemyCastle = this.allegiance == false ? GameObject.FindGameObjectWithTag("Castle1").GetComponent<Attackable>() : GameObject.FindGameObjectWithTag("Castle0").GetComponent<Attackable>();
     }
 }
