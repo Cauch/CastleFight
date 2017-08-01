@@ -78,10 +78,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\AssetStore\Warrior Pack Bundle 2 FREE\Code\IKHands.cs" />
+    <Compile Include="Assets\AssetStore\Warrior Pack Bundle 2 FREE\Code\SmoothFollow.cs" />
+    <Compile Include="Assets\AssetStore\Warrior Pack Bundle 2 FREE\Code\WarriorAnimationDemoFREE.cs" />
     <Compile Include="Assets\RTS_Camera\Demo\DemoScene.cs" />
     <Compile Include="Assets\RTS_Camera\Demo\TargetSelector.cs" />
     <Compile Include="Assets\RTS_Camera\Scripts\RTS_Camera.cs" />
     <Compile Include="Assets\Scripts\Attackable.cs" />
+    <Compile Include="Assets\Scripts\Builder.cs" />
     <Compile Include="Assets\Scripts\Buildings\Building.cs" />
     <Compile Include="Assets\Scripts\Buildings\Shop.cs" />
     <Compile Include="Assets\Scripts\Buildings\SpellBuilding.cs" />
@@ -89,14 +93,28 @@
     <Compile Include="Assets\Scripts\CameraScript.cs" />
     <Compile Include="Assets\Scripts\Controller.cs" />
     <Compile Include="Assets\Scripts\MouseManager.cs" />
+    <Compile Include="Assets\Scripts\PreviewBuilding.cs" />
     <Compile Include="Assets\Scripts\Selectable.cs" />
     <Compile Include="Assets\Scripts\SelectionIndicator.cs" />
+    <Compile Include="Assets\Scripts\Skills\Attacks\Attack.cs" />
+    <Compile Include="Assets\Scripts\Skills\Attacks\CriticalAttack.cs" />
+    <Compile Include="Assets\Scripts\Skills\Attacks\Poison.cs" />
+    <Compile Include="Assets\Scripts\Skills\DefensiveSkill.cs" />
+    <Compile Include="Assets\Scripts\Skills\Effect.cs" />
+    <Compile Include="Assets\Scripts\Skills\OffensiveSkill.cs" />
+    <Compile Include="Assets\Scripts\Skills\Skill.cs" />
+    <Compile Include="Assets\Scripts\Tests\TestBuilder.cs" />
+    <Compile Include="Assets\Scripts\Tests\TestBuilding.cs" />
+    <Compile Include="Assets\Scripts\UI\UIBuilderManager.cs" />
     <Compile Include="Assets\Scripts\UI\UIBuildingManager.cs" />
-    <Compile Include="Assets\Scripts\UI\UIBuildingPanel.cs" />
+    <Compile Include="Assets\Scripts\UI\UIItemManager.cs" />
     <Compile Include="Assets\Scripts\UI\UIManager.cs" />
     <Compile Include="Assets\Scripts\UI\UIUnitManager.cs" />
+    <Compile Include="Assets\Scripts\Units\FlyingUnit.cs" />
+    <Compile Include="Assets\Scripts\Units\GroundUnit.cs" />
+    <Compile Include="Assets\Scripts\Units\Humans\Footman.cs" />
+    <Compile Include="Assets\Scripts\Units\Undeads\Skeleton.cs" />
     <Compile Include="Assets\Scripts\Units\Unit.cs" />
-    <Compile Include="Assets\TestBuilding.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\RTS_Camera\Demo\Projectors\Guidelines.txt" />

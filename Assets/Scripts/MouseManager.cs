@@ -81,7 +81,17 @@ public class MouseManager : MonoBehaviour {
     void HoverObject(GameObject selection)
     {
         hoveredObject = selection;
-        // Mouse becomes green?
+        Selectable obj = selection.GetComponent<Selectable>();
+        if (obj != null)
+        {
+            //Change mouse color with
+            //Screen.showCursor = false;
+            //RenderOwnCursorImage();
+        } else
+        {
+            //HideOwnCursorImage();
+            //Screen.showCursor = true;     
+        }
     }
 
     void Clear(ref GameObject obj)// Rename?
