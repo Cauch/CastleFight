@@ -32,7 +32,7 @@ public abstract class Unit : Attackable {
     public void AdjustStart()
     {
         this.allegiance = this.creator.allegiance;
-        this.enemyCastle = this.allegiance == false ? GameObject.FindGameObjectWithTag("Castle1").GetComponent<Attackable>() : GameObject.FindGameObjectWithTag("Castle0").GetComponent<Attackable>();
+        this.enemyCastle = this.allegiance == false ? GameObject.FindGameObjectWithTag("EastCastle").GetComponent<Attackable>() : GameObject.FindGameObjectWithTag("WestCastle").GetComponent<Attackable>();
 
     }
 
