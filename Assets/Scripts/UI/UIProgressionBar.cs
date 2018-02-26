@@ -5,16 +5,15 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIBuildingManager : UIItemManager
+public class UIProgressionBar : MonoBehaviour
 {
-    public Text HpText;
-    public Text ArmorText;  
-    public Building Building;
+    //public Text HpText;
+    //public Text ArmorText;
+    public UnitBuilding Building;
 
     public GameObject ButtonTemplate;
     public GameObject TextTemplate;
-    private Transform _progressBar;
-
+    public GameObject UniteProgressionBar;
 
     private Transform _upgradesSubPanel;
     private Dictionary<IBuildingCost, Button> _buttons = new Dictionary<IBuildingCost, Button>();
@@ -23,14 +22,12 @@ public class UIBuildingManager : UIItemManager
     void Start()
     {
         //Should find cause to building being null 1/2
-       
         if (Building == null)
         {
             return;
         }
 
         _upgradesSubPanel = this.transform.GetChild(1);
-        _progressBar = this.transform.GetChild(2);
 
         //Instantiate buttons
         foreach (GameObject upgrade in Building.Upgrades)
@@ -75,11 +72,11 @@ public class UIBuildingManager : UIItemManager
     {
         if (Building != null)
         {
-            HpText.text = Building.Hp.ToString() + "/" + Building.MaxHp.ToString();
-            ArmorText.text = Building.Armor.ToString();
-            Image image = _progressBar.GetComponent<Image>();
+            //    HpText.text = Building.Hp.ToString() + "/" + Building.MaxHp.ToString();
+            //    ArmorText.text = Building.Armor.ToString();
+            Image image = UniteProgressionBar.GetComponent<Image>();
             image.fillAmount = Building.Loading / Building.MaxTime;
         }
-
+        
     }
 }

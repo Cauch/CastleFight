@@ -4,8 +4,10 @@ using UnityEngine;
 
 public abstract class Building : Attackable {
     public List<GameObject> Upgrades;
+    public float Loading;
+    public float MaxTime;
 
-    private void Awake()
+    new protected void Awake()
     {
         uiPanel.GetComponent<UIBuildingManager>().Building = this;
     }
@@ -22,6 +24,19 @@ public abstract class Building : Attackable {
 
     new void Update()
     {
+        
         base.Update();
+        if (this.isActive)
+        {
+            Loading += Time.deltaTime;
+            if (Loading > MaxTime)
+            {
+                ActivateMaxLoading();
+                Loading = 0;
+            }
+        }
     }
+    public abstract void ActivateMaxLoading();
+
+    
 }

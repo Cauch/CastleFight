@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class UnitBuilding : Building {
-    public float maxTime;
+    
     public GameObject prefabUnit;
     public bool spawnAtCreation;
     Transform world;
-
-    float loading;
 
     // Use this for initialization
     new void Start () {
@@ -21,29 +19,11 @@ public class UnitBuilding : Building {
 	}
 
     // Update is called once per frame
-    new void Update()
-    {
-        if (isActive)   
-        {
-            base.Update();
-            loading += Time.deltaTime;
-
-            CheckUnitProduction();
-        }
-    }
-
-    void CheckUnitProduction()
-    {
-        if(maxTime <= loading)
-        {
-            ProduceUnit();
-        }
-    }
 
     void ProduceUnit()
     {
         GameObject unit = Instantiate(prefabUnit, this.transform.position, Quaternion.identity);
-        loading = 0f;
+        Loading = 0f;
 
         unit.transform.SetParent(world.transform, false);
         unit.transform.position = FindRoomForUnit();
@@ -59,4 +39,8 @@ public class UnitBuilding : Building {
         return this.transform.position;
     }
 
+    public override void ActivateMaxLoading()
+    {
+        ProduceUnit();
+    }
 }

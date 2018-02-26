@@ -9,10 +9,6 @@ public abstract class IncomeBuilding : Building {
     private float _time;
 
     protected abstract void InitResource();
-    private void Awake()
-    {
-        uiPanel.GetComponent<UIBuildingManager>().Building = this;
-    }
 
     new protected virtual void Start()
     {
@@ -20,16 +16,10 @@ public abstract class IncomeBuilding : Building {
         base.Start();
     }
 
-    new protected virtual void Update()
+    public override void ActivateMaxLoading()
     {
-        base.Update();
-
-        _time += Time.deltaTime;
-
-        if (_time > _cooldown / GameSettings.IncomeSpeedModifier)
-        {
-            Creator.Resources.Where((r) => r.GetType() == _resource.GetType()).First().Add(_resource);
-            _time = 0;
-        }
+        Creator.Resources.Where((r) => r.GetType() == _resource.GetType()).First().Add(_resource);
     }
+    
+    
 }

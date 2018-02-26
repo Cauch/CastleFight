@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Shop : Building {
+    public override void ActivateMaxLoading()
+    {
+       
+    }
 
-	// Use this for initialization
-	new void Start () {
+    // Use this for initialization
+    new void Start () {
         base.Start();
 	}
 	
