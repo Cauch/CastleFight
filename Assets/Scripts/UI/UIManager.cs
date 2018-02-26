@@ -4,14 +4,14 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour {
-    GameObject currentPanel;
-    public GameObject defaultPanel;
-    GameObject canvas;
+    GameObject _currentPanel;
+    public GameObject DefaultPanel;
+    GameObject _canvas;
 	// Use this for initialization
 	void Start () {
-        canvas = GameObject.FindGameObjectWithTag("Canvas");
-        this.currentPanel = Instantiate(defaultPanel);
-        this.currentPanel.transform.SetParent(canvas.transform);
+        _canvas = GameObject.FindGameObjectWithTag("Canvas");
+        this._currentPanel = Instantiate(DefaultPanel);
+        this._currentPanel.transform.SetParent(_canvas.transform);
     }
 
     // Update is called once per frame
@@ -22,10 +22,13 @@ public class UIManager : MonoBehaviour {
     public void ReplacePanel(GameObject panel)
     {
         Transform test = panel.transform;
-        this.currentPanel.SetActive(false);
-        this.currentPanel = (panel);
-        this.currentPanel.SetActive(true);
-        this.currentPanel.transform.SetParent(canvas.transform,false);// Could be placed at the instantiation of the panels
+        if(this._currentPanel != null)
+        {
+            this._currentPanel.SetActive(false);
+        }
+        this._currentPanel = (panel);
+        this._currentPanel.SetActive(true);
+        this._currentPanel.transform.SetParent(_canvas.transform,false);// Could be placed at the instantiation of the panels
         test = panel.transform;
     }
 }

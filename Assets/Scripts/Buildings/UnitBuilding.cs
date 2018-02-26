@@ -50,7 +50,7 @@ public class UnitBuilding : Building {
         unit.GetComponent<Unit>().isActive = true;
 
         Unit unitComp = unit.GetComponent<Unit>();
-        unitComp.creator = creator;
+        unitComp.Creator = Creator;
         unitComp.AdjustStart();
     }
 

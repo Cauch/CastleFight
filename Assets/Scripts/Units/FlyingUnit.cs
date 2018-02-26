@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FlyingUnit : Unit {
+public abstract class FlyingUnit : Unit {
 	// Use this for initialization
 	new void Start () {
         base.Start();
@@ -19,7 +19,7 @@ public class FlyingUnit : Unit {
     protected override void Move(Attackable target)
     {
         Vector3 direction = new Vector3(target.transform.position.x - this.transform.position.x, 0f, target.transform.position.z - this.transform.position.z).normalized;
-        this.transform.position += direction * defaultSpeed;
+        this.transform.position += direction * DefaultSpeed;
     }
 
 
