@@ -3,18 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class Building : Attackable {
-    public float income;
-    public uint cost;
+    public List<GameObject> Upgrades;
+
+    private void Awake()
+    {
+        uiPanel.GetComponent<UIBuildingManager>().Building = this;
+    }
 
     new protected void Start()
     {
         base.Start();
-        uiPanel.GetComponent<UIBuildingManager>().building = this;
     }
 
     public void AdjustStart()
     {
-        this.allegiance = this.creator.allegiance;
+        this.allegiance = this.Creator.allegiance;
     }
 
     new void Update()

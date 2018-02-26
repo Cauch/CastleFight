@@ -23,8 +23,8 @@ public class UIUnitManager : MonoBehaviour
 
         if(unit != null)
         {
-            hpText.text = unit.hp.ToString() + "/" + unit.maxHp.ToString();
-            armorText.text = unit.armor.ToString();
+            hpText.text = unit.Hp.ToString() + "/" + unit.MaxHp.ToString();
+            armorText.text = unit.Armor.ToString();
         }
 
     }

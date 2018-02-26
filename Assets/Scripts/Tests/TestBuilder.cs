@@ -3,8 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TestBuilder : MonoBehaviour {
-   
+public class TestBuilder : MonoBehaviour
+{
+
     public GameObject uiManager;
     public GameObject mouseManager;
     public GameObject indicator;
@@ -15,7 +16,8 @@ public class TestBuilder : MonoBehaviour {
 
     GameObject world;
     // Use this for initialization
-    void Start() {
+    void Start()
+    {
         world = GameObject.FindGameObjectWithTag("World");
         for (int i = 0; i < gObjects.Count; i++)
         {
@@ -32,16 +34,15 @@ public class TestBuilder : MonoBehaviour {
         {
             GameObject player = players[i];
             Vector3 playerPos = playerPosList[i];
-            playerInstance = Instantiate(player, playerPos, Quaternion.identity);
-            playerInstance.transform.SetParent(world.transform);
+            playerInstance = Instantiate(player, playerPos, Quaternion.identity, world.transform);
             playerInstance.transform.localScale = player.transform.localScale;
         }
 
 
         //Code dégueulasse
-        uiManager.GetComponent<UIManager>().defaultPanel = playerInstance.GetComponent<Builder>().uiPanel;
-        
-            uiManager = Instantiate(uiManager);
+        uiManager.GetComponent<UIManager>().DefaultPanel = playerInstance.GetComponent<Builder>().uiPanel;
+
+        uiManager = Instantiate(uiManager);
 
         mouseManager.GetComponent<MouseManager>().defaultSelection = playerInstance;
         mouseManager.GetComponent<MouseManager>().uiManager = uiManager.GetComponent<UIManager>();
@@ -50,9 +51,10 @@ public class TestBuilder : MonoBehaviour {
 
         Instantiate(indicator);
     }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
 }
