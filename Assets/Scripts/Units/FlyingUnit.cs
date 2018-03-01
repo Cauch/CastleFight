@@ -29,7 +29,7 @@ public abstract class FlyingUnit : Unit {
 
     void SetHeight()
     {
-        this.transform.position = this.isActive ? new Vector3(this.transform.position.x, 100f, this.transform.position.z) : new Vector3(this.transform.position.x, 3f, this.transform.position.z);
+        this.transform.position = this.IsActive ? new Vector3(this.transform.position.x, 100f, this.transform.position.z) : new Vector3(this.transform.position.x, 3f, this.transform.position.z);
     }
 
 }

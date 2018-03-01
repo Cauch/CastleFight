@@ -5,12 +5,9 @@ using UnityEngine.UI;
 
 public class UIUnitManager : MonoBehaviour
 {
-    public Text hpText;
-    public Text armorText;
-    public Text attackText;
-    public Text attackSpeedText;
-    public Unit unit;
-
+    public Text HpText;
+    public Text ArmorText;
+    public Unit Unit;
     // Use this for initialization
     void Start()
     {
@@ -21,11 +18,10 @@ public class UIUnitManager : MonoBehaviour
     void Update()
     {
 
-        if(unit != null)
-        {
-            hpText.text = unit.Hp.ToString() + "/" + unit.MaxHp.ToString();
-            armorText.text = unit.Armor.ToString();
-        }
+        if (Unit == null) return;
 
+        HpText.text = "HP: " + Unit.Hp.ToString() + "/" + Unit.MaxHp.ToString();
+        ArmorText.text = "Armor: " + Unit.Armor.ToString();
+        
     }
 }

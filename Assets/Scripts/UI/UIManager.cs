@@ -4,14 +4,24 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour {
+    public GameObject BuilderPanel;
+    public GameObject BuildingPanel;
+    public GameObject UnitPanel;
+
     GameObject _currentPanel;
-    public GameObject DefaultPanel;
     GameObject _canvas;
+
 	// Use this for initialization
 	void Start () {
         _canvas = GameObject.FindGameObjectWithTag("Canvas");
-        this._currentPanel = Instantiate(DefaultPanel);
-        this._currentPanel.transform.SetParent(_canvas.transform);
+
+        BuilderPanel = Instantiate(BuilderPanel, _canvas.transform);
+        BuildingPanel = Instantiate(BuildingPanel, _canvas.transform);
+        UnitPanel = Instantiate(UnitPanel, _canvas.transform);
+
+        _currentPanel = BuildingPanel;
+        BuildingPanel.SetActive(false);
+        UnitPanel.SetActive(false);
     }
 
     // Update is called once per frame
@@ -21,14 +31,40 @@ public class UIManager : MonoBehaviour {
 
     public void ReplacePanel(GameObject panel)
     {
-        Transform test = panel.transform;
-        if(this._currentPanel != null)
+        if(_currentPanel == panel)
         {
-            this._currentPanel.SetActive(false);
+            return;
         }
-        this._currentPanel = (panel);
+        this._currentPanel.SetActive(false);
+        this._currentPanel = panel;
         this._currentPanel.SetActive(true);
-        this._currentPanel.transform.SetParent(_canvas.transform,false);// Could be placed at the instantiation of the panels
-        test = panel.transform;
+    }
+
+    public void ReplacePanel(Selectable selectable)
+    {
+        switch(selectable.PanelType)
+        {
+            case PanelType.BUILDER:
+                Builder builder = selectable.GetComponent<Builder>();
+                UIBuilderManager builderManager = BuilderPanel.GetComponent<UIBuilderManager>();
+
+                builderManager.Builder = builder;
+                ReplacePanel(BuilderPanel);
+                break;
+            case PanelType.BUILDING:
+                Building building = selectable.GetComponent<Building>();
+                UIBuildingManager buildingManager = BuildingPanel.GetComponent<UIBuildingManager>();
+
+                buildingManager.Building = building;
+                ReplacePanel(BuildingPanel);
+                break;
+            case PanelType.UNIT:
+                Unit unit = selectable.GetComponent<Unit>();
+                UIUnitManager unitManager = BuilderPanel.GetComponent<UIUnitManager>();
+
+                unitManager.Unit = unit;
+                ReplacePanel(UnitPanel);
+                break;
+        }
     }
 }

@@ -75,7 +75,7 @@ public class MouseManager : MonoBehaviour {
             Selectable obj = hoveredObject.GetComponent<Selectable>();
             if ( obj != null)
             {
-                obj.isSelected = true;
+                obj.IsSelected = true;
                 selectedObject = hoveredObject;
             }
         }
@@ -92,12 +92,12 @@ public class MouseManager : MonoBehaviour {
         if (obj == null) return;
         
         Selectable s = obj.GetComponent<Selectable>();
-        if (s != null) s.isSelected = false;
+        if (s != null) s.IsSelected = false;
         obj = defaultSelection;
     }
 
     void UpdatePanel()
     {
-        uiManager.ReplacePanel(selectedObject.GetComponent<Selectable>().uiPanel);
+        uiManager.ReplacePanel(selectedObject.GetComponent<Selectable>());
     }
 }

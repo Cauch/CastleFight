@@ -9,8 +9,6 @@ public abstract class Unit : Attackable {
     const float BASE_GLOBAL_COOLDOWN = 0.2f;
     const float ANIMATOR_SPEED_MODIFIER = 0.02f;
 
-    //Animator animator;
-
     public Attackable EnemyCastle;
 
     // Protected Attributes
@@ -29,18 +27,15 @@ public abstract class Unit : Attackable {
     new protected void Start()
     {
         base.Start();
-        //animator = this.GetComponent<Animator>();
-        
-        uiPanel.GetComponent<UIUnitManager>().unit = this;
+        PanelType = PanelType.UNIT;
     }
 
     protected virtual new void Update()
     {
         base.Update();
-        if (isActive)
+        if (IsActive)
         {
             bool isAttacking = UseSkill();
-            //animator.SetBool("isAttacking", isAttacking);
 
             if (isAttacking)
             {
@@ -55,7 +50,7 @@ public abstract class Unit : Attackable {
 
     void Activate()
     {
-        isActive = true;
+        IsActive = true;
     }
 
     void RefreshCooldown()
@@ -70,8 +65,10 @@ public abstract class Unit : Attackable {
     //Find root cause and change
     public void AdjustStart()
     {
-        this.allegiance = this.Creator.allegiance;
-        this.EnemyCastle = this.allegiance == false ? GameObject.FindGameObjectWithTag("Castle1").GetComponent<Attackable>() : GameObject.FindGameObjectWithTag("Castle0").GetComponent<Attackable>();
+        this.Allegiance = this.Creator.Allegiance;
+        this.EnemyCastle = this.Allegiance ?
+            GameObject.FindGameObjectWithTag("Castle0").GetComponent<Attackable>() :
+            GameObject.FindGameObjectWithTag("Castle1").GetComponent<Attackable>();
     }
 
     //Returns true if a skill is in use

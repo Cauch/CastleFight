@@ -20,7 +20,7 @@ public abstract class Attackable : Selectable {
     }
 
     public void ModHp(float hp){ this.Hp = Mathf.Min(this.Hp + hp, MaxHp); }
-    public void ModAllegiance(bool allegiance) { this.allegiance = allegiance; }
+    public void ModAllegiance(bool allegiance) { this.Allegiance = allegiance; }
 
     new protected virtual void Start()
     {

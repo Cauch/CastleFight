@@ -303,6 +303,7 @@
     <Compile Include="Assets\Scripts\CameraScript.cs" />
     <Compile Include="Assets\Scripts\Controller.cs" />
     <Compile Include="Assets\Scripts\Helpers\GameSettings.cs" />
+    <Compile Include="Assets\Scripts\Helpers\PanelType.cs" />
     <Compile Include="Assets\Scripts\Helpers\TargetingFunction.cs" />
     <Compile Include="Assets\Scripts\MouseManager.cs" />
     <Compile Include="Assets\Scripts\Resources\IResource.cs" />
@@ -334,6 +335,7 @@
     <Compile Include="Assets\Scripts\UI\UIBuildingManager.cs" />
     <Compile Include="Assets\Scripts\UI\UIItemManager.cs" />
     <Compile Include="Assets\Scripts\UI\UIManager.cs" />
+    <Compile Include="Assets\Scripts\UI\UIProgressionBar.cs" />
     <Compile Include="Assets\Scripts\UI\UIUnitManager.cs" />
     <Compile Include="Assets\Scripts\Units\FlyingUnit.cs" />
     <Compile Include="Assets\Scripts\Units\GroundUnit.cs" />
