@@ -12,7 +12,7 @@ public class UnitBuilding : Building {
     new void Start () {
         world = GameObject.FindGameObjectWithTag("World").transform;
         base.Start();
-        if(spawnAtCreation && isActive)
+        if(spawnAtCreation && IsActive)
         {
             ProduceUnit();
         }
@@ -27,7 +27,7 @@ public class UnitBuilding : Building {
 
         unit.transform.SetParent(world.transform, false);
         unit.transform.position = FindRoomForUnit();
-        unit.GetComponent<Unit>().isActive = true;
+        unit.GetComponent<Unit>().IsActive = true;
 
         Unit unitComp = unit.GetComponent<Unit>();
         unitComp.Creator = Creator;

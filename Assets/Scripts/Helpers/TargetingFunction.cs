@@ -68,11 +68,11 @@ public static class TargetingFunction {
     public static bool IsEnemy(Attackable attacker, Attackable target)
     {
         if (attacker == null || target == null) return false;
-        return attacker.allegiance != target.allegiance && target.isActive;
+        return attacker.Allegiance != target.Allegiance && target.IsActive;
     }
     public static bool IsAlly(Attackable attacker, Attackable target)
     {
         if (attacker == null || target == null) return false;
-        return attacker.allegiance == target.allegiance;
+        return attacker.Allegiance == target.Allegiance;
     }
 }

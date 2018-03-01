@@ -8,36 +8,46 @@ using UnityEngine.UI;
 public class UIBuildingManager : UIItemManager
 {
     public Text HpText;
-    public Text ArmorText;  
-    public Building Building;
+    public Text ArmorText;
+
+    private Building _building;
+    public Building Building
+    {
+        get { return _building; }
+
+        set
+        {
+            if (_building != value)
+            {
+                // Could be avoided if Builders panels are memorized
+                _building = value;
+                DestroyButtons();
+
+                InstantiateButtons();
+            }
+        }
+    }
 
     public GameObject ButtonTemplate;
     public GameObject TextTemplate;
     private Transform _progressBar;
 
-
     private Transform _upgradesSubPanel;
     private Dictionary<IBuildingCost, Button> _buttons = new Dictionary<IBuildingCost, Button>();
 
     // Use this for initialization
-    void Start()
+    void Awake()
     {
-        //Should find cause to building being null 1/2
-       
-        if (Building == null)
-        {
-            return;
-        }
-
         _upgradesSubPanel = this.transform.GetChild(1);
         _progressBar = this.transform.GetChild(2);
+    }
 
-        //Instantiate buttons
+    private void InstantiateButtons()
+    {
         foreach (GameObject upgrade in Building.Upgrades)
         {
             IBuildingCost buildCost = upgrade.GetComponent<IBuildingCost>();
             buildCost.Init();
-
 
             GameObject go = Instantiate(ButtonTemplate, _upgradesSubPanel);
             Button button = go.GetComponent<Button>();
@@ -50,7 +60,16 @@ public class UIBuildingManager : UIItemManager
 
             button.GetComponentInChildren<Text>().text = upgrade.name + Environment.NewLine + costText;
         }
+    }
 
+    private void DestroyButtons()
+    {
+        foreach (KeyValuePair<IBuildingCost, Button> kv in _buttons)
+        {
+            Destroy(kv.Value.gameObject);
+        }
+
+        _buttons.Clear();
     }
 
     void ClickUpgrade(GameObject upgrade)
@@ -73,13 +92,11 @@ public class UIBuildingManager : UIItemManager
     // Update is called once per frame
     void Update()
     {
-        if (Building != null)
-        {
-            HpText.text = Building.Hp.ToString() + "/" + Building.MaxHp.ToString();
-            ArmorText.text = Building.Armor.ToString();
-            Image image = _progressBar.GetComponent<Image>();
-            image.fillAmount = Building.Loading / Building.MaxTime;
-        }
-
+        if (Building == null) return;
+        
+        HpText.text = "HP: " + Building.Hp.ToString() + "/" + Building.MaxHp.ToString();
+        ArmorText.text = "Armor: " + Building.Armor.ToString();
+        Image image = _progressBar.GetComponent<Image>();
+        image.fillAmount = Building.Loading / Building.MaxTime;
     }
 }

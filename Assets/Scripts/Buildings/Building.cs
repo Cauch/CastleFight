@@ -7,26 +7,22 @@ public abstract class Building : Attackable {
     public float Loading;
     public float MaxTime;
 
-    new protected void Awake()
-    {
-        uiPanel.GetComponent<UIBuildingManager>().Building = this;
-    }
-
     new protected void Start()
     {
         base.Start();
+        PanelType = PanelType.BUILDING;
     }
 
     public void AdjustStart()
     {
-        this.allegiance = this.Creator.allegiance;
+        this.Allegiance = this.Creator.Allegiance;
     }
 
     new void Update()
     {
         
         base.Update();
-        if (this.isActive)
+        if (this.IsActive)
         {
             Loading += Time.deltaTime;
             if (Loading > MaxTime)

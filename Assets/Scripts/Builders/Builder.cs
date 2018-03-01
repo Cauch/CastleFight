@@ -12,8 +12,8 @@ public class Builder : Selectable {
     new protected virtual void Start()
     {
         base.Start();
-        uiPanel.GetComponent<UIBuilderManager>().Builder = this;
         this._ownedBuildings = new List<GameObject>();
+        PanelType = PanelType.BUILDER;
     }
 
     protected void Update()

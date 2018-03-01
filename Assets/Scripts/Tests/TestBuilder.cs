@@ -40,8 +40,6 @@ public class TestBuilder : MonoBehaviour
 
 
         //Code dégueulasse
-        uiManager.GetComponent<UIManager>().DefaultPanel = playerInstance.GetComponent<Builder>().uiPanel;
-
         uiManager = Instantiate(uiManager);
 
         mouseManager.GetComponent<MouseManager>().defaultSelection = playerInstance;

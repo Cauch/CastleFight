@@ -90,11 +90,15 @@ public class PreviewBuilding : MonoBehaviour {
             Builder.PayBuilding(cost);
             BuildingTemplate.transform.position = _buildingPreview.transform.position;
             Destroy(_buildingPreview);
-            GameObject newBuilding = Builder.InstantiateBuilding(BuildingTemplate);
-            newBuilding.transform.SetParent(_world.transform);
-            newBuilding.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-            newBuilding.GetComponent<Building>().Creator = Builder;
-            newBuilding.GetComponent<Building>().allegiance = Builder.allegiance;
+            GameObject newBuildingGO = Builder.InstantiateBuilding(BuildingTemplate);
+            newBuildingGO.transform.SetParent(_world.transform);
+            newBuildingGO.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+
+            Building newBuilding = newBuildingGO.GetComponent<Building>();
+
+            newBuilding.Creator = Builder;
+            newBuilding.Allegiance = Builder.Allegiance;
+            newBuilding.IsActive = true;
             Destroy(_buildingPreview);
             Destroy(this.gameObject);
         }
@@ -114,7 +118,7 @@ public class PreviewBuilding : MonoBehaviour {
         _buildingPreview = Instantiate(BuildingTemplate);
         Destroy(_buildingPreview.GetComponent<Rigidbody>());
         Building preview = _buildingPreview.GetComponent<Building>();
-        preview.isActive = false;
+        preview.IsActive = false;
         _buildingPreview.transform.SetParent(_world.transform);
         _buildingPreview.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
     }
@@ -123,7 +127,7 @@ public class PreviewBuilding : MonoBehaviour {
     {
         Selectable s = Builder.GetComponent<Selectable>();
 
-        Collider col = GameObject.FindGameObjectWithTag(s.allegiance ? "BuildZone1" : "BuildZone0").GetComponent<Collider>();
+        Collider col = GameObject.FindGameObjectWithTag(s.Allegiance ? "BuildZone1" : "BuildZone0").GetComponent<Collider>();
     
         return col;
     }
