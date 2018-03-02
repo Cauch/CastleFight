@@ -22,6 +22,5 @@ public class UIUnitManager : MonoBehaviour
 
         HpText.text = "HP: " + Unit.Hp.ToString() + "/" + Unit.MaxHp.ToString();
         ArmorText.text = "Armor: " + Unit.Armor.ToString();
-        
     }
 }

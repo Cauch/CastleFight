@@ -60,7 +60,7 @@ public class UIManager : MonoBehaviour {
                 break;
             case PanelType.UNIT:
                 Unit unit = selectable.GetComponent<Unit>();
-                UIUnitManager unitManager = BuilderPanel.GetComponent<UIUnitManager>();
+                UIUnitManager unitManager = UnitPanel.GetComponent<UIUnitManager>();
 
                 unitManager.Unit = unit;
                 ReplacePanel(UnitPanel);
