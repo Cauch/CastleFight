@@ -5,7 +5,7 @@ using UnityEngine;
 public abstract class Building : Attackable {
     public List<GameObject> Upgrades;
     public float Loading;
-    public float MaxTime;
+    public float MaxTime = 60;
 
     new protected void Start()
     {
