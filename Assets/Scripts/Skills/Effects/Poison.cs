@@ -16,7 +16,7 @@ public class Poison : Effect
         this.removeDmg = removeDmg;
     }
 
-    public override void ApplyOnTarget(Attackable target)
+    public override void ApplyOnTarget(Targetable target)
     {
         target.AddEffect(this);
     }

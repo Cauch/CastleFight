@@ -13,7 +13,7 @@ public class ResourceIron : IResource
     {
         if (cost is ResourceIron)
         {
-            Value -= (cost as ResourceIron).Value;
+            Value -= cost.Value;
         }
     }
 }

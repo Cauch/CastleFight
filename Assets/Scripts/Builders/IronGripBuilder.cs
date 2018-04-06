@@ -6,9 +6,13 @@ public class IronGripBuilder : Builder {
     public IResource Iron;
     public IResource Faith;
 
+    public uint StartingIron = 100u;
+    public uint BaseIronIncome = 10u;
+    public uint StartingFaith = 0u;
+
     private IResource _baseIncomeIron;
 
-    protected float _cooldown;
+    public float IncomeCooldown = 10;
     private float _time;
 
     new protected virtual void Start()
@@ -16,11 +20,10 @@ public class IronGripBuilder : Builder {
         base.Start();
 
         _time = 0;
-        _cooldown = 10;
 
-        Faith = new ResourceFaith(0u);
-        Iron = new ResourceIron(100u);
-        _baseIncomeIron = new ResourceIron(10u);
+        Faith = new ResourceFaith(StartingFaith);
+        Iron = new ResourceIron(StartingIron);
+        _baseIncomeIron = new ResourceIron(BaseIronIncome);
 
         Resources = new List<IResource>
         {
@@ -35,7 +38,7 @@ public class IronGripBuilder : Builder {
 
         _time += Time.deltaTime;
 
-        if (_time > _cooldown / GameSettings.IncomeSpeedModifier)
+        if (_time > IncomeCooldown / GameSettings.IncomeSpeedModifier)
         {
             Iron.Add(_baseIncomeIron);
             _time = 0;

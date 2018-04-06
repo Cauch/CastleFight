@@ -5,5 +5,6 @@ using UnityEngine;
 public enum PanelType  {
     BUILDER,
     BUILDING,
-    UNIT
+    UNIT,
+    CORPSE
 }

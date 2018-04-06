@@ -8,10 +8,12 @@ public class UIUnitManager : MonoBehaviour
     public Text HpText;
     public Text ArmorText;
     public Unit Unit;
+
+    private UIManager _uiManager;
     // Use this for initialization
     void Start()
     {
-        //unit = unitObject.GetComponent<Unit>();
+        _uiManager = FindObjectOfType<UIManager>();
     }
 
     // Update is called once per frame
@@ -19,7 +21,10 @@ public class UIUnitManager : MonoBehaviour
     {
 
         if (Unit == null) return;
-
+        if(Unit.Hp <= 0)
+        {
+            _uiManager.ReplacePanelDefault();
+        }
         HpText.text = "HP: " + Unit.Hp.ToString() + "/" + Unit.MaxHp.ToString();
         ArmorText.text = "Armor: " + Unit.Armor.ToString();
     }

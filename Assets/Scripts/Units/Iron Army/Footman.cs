@@ -7,7 +7,7 @@ public class Footman : GroundUnit
 {
     private Attack _attack;
 
-    public override bool UseSkill()
+    public override ActiveSkill UseSkill()
     {
         return TargetingFunction.UseAttack(this, _attack);
     }
@@ -21,7 +21,7 @@ public class Footman : GroundUnit
         ArmorPierce armorPiercing = new ArmorPierce(0.3f);
         modifiers.Add(armorPiercing);
 
-        _attack = new Attack(0.5f, 0.8f, 0, 1.0f, 20, modifiers, (Attackable attackable) => TargetingFunction.IsEnemy(this, attackable));
+        _attack = new Attack(0, 1.0f / 0.8f, this, 20, modifiers, (Targetable attackable) => TargetingFunction.IsEnemy(this, attackable));
         _skills = new[] { _attack };
     }
 }

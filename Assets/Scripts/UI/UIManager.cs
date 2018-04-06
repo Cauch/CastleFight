@@ -11,6 +11,8 @@ public class UIManager : MonoBehaviour {
     GameObject _currentPanel;
     GameObject _canvas;
 
+    public Selectable DefaultSelectable;
+
 	// Use this for initialization
 	void Start () {
         _canvas = GameObject.FindGameObjectWithTag("Canvas");
@@ -23,11 +25,6 @@ public class UIManager : MonoBehaviour {
         BuildingPanel.SetActive(false);
         UnitPanel.SetActive(false);
     }
-
-    // Update is called once per frame
-    void Update () {
-		
-	}
 
     public void ReplacePanel(GameObject panel)
     {
@@ -65,6 +62,13 @@ public class UIManager : MonoBehaviour {
                 unitManager.Unit = unit;
                 ReplacePanel(UnitPanel);
                 break;
+            case PanelType.CORPSE:
+                break;
         }
+    }
+
+    public void ReplacePanelDefault()
+    {
+        ReplacePanel(DefaultSelectable);
     }
 }

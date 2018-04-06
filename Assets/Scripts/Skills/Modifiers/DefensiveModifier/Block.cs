@@ -15,7 +15,7 @@
 
         if (crit < _chance)
         {
-            attack.dmg = System.Math.Max(attack.dmg - _reduction, 0);
+            attack.Damage = System.Math.Max(attack.Damage - _reduction, 0);
         }
         return attack;
     }

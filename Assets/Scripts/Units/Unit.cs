@@ -10,24 +10,39 @@ public abstract class Unit : Attackable {
     const float ANIMATOR_SPEED_MODIFIER = 0.02f;
 
     public Attackable EnemyCastle;
+    public GameObject Corpse;
+    public bool Corpseless = false;
+    public GameObject Model;
+
+    public float DefaultSpeed;
+    public float DetectionRange;
 
     // Protected Attributes
     protected float _speedModifier;
     protected Skill[] _skills;
-
-    public float DefaultSpeed;
-    public float DetectionRange;
     protected float _generalColdown;
 
     // Abstract Methods
-    protected abstract void Move(Attackable target);
+    protected abstract void Move(Targetable target);
     protected abstract void StopMoving();
-    
+
+    protected Corpse _corpse;
+
+    protected ActiveSkill _currentSkill;
+
+    private void Awake()
+    {
+        PanelType = PanelType.UNIT;
+        if (!Corpseless)
+        {
+            _corpse = GetComponent<Corpse>();
+            _corpse.enabled = false;
+        }
+    }
     // Private and protected methods
     new protected void Start()
     {
         base.Start();
-        PanelType = PanelType.UNIT;
     }
 
     protected virtual new void Update()
@@ -35,29 +50,30 @@ public abstract class Unit : Attackable {
         base.Update();
         if (IsActive)
         {
-            bool isAttacking = UseSkill();
-
-            if (isAttacking)
+            if(_currentSkill == null)
             {
-                RefreshCooldown();
+                _currentSkill = UseSkill();
+            }
+
+            if(_currentSkill != null)
+            {
+                _currentSkill = _currentSkill.Update();
                 StopMoving();
-            } else
+            }
+            else
             {
                 Move(TargetingFunction.GetClosestEnemy(this));
-            }     
-        }
-    }
+            }
 
-    void Activate()
-    {
-        IsActive = true;
+            RefreshCooldown();
+        }
     }
 
     void RefreshCooldown()
     {
         foreach (ActiveSkill skill in _skills)
         {
-            skill.cooldown -= (Time.deltaTime * skill.skillRefreshSpeed);
+            skill.Cooldown -= (Time.deltaTime * skill.SkillRefreshSpeed);
         }
     }
 
@@ -69,8 +85,50 @@ public abstract class Unit : Attackable {
         this.EnemyCastle = this.Allegiance ?
             GameObject.FindGameObjectWithTag("Castle0").GetComponent<Attackable>() :
             GameObject.FindGameObjectWithTag("Castle1").GetComponent<Attackable>();
+
+        //Change color
+        this.transform.GetChild(0).GetComponent<Renderer>().material.color = this.Allegiance ? Color.black : Color.white;
+
     }
 
-    //Returns true if a skill is in use
-    public abstract bool UseSkill();
+    //Returns ActiveSkill to use, null if none
+    public abstract ActiveSkill UseSkill();
+
+    protected override void Die()
+    {
+        if (_currentSkill != null)
+        {
+            _currentSkill.Break();
+            _currentSkill = null;
+        }
+        if(!Corpseless)
+        {
+            _corpse.enabled = true;
+            this.transform.GetChild(0).GetComponent<Renderer>().material.color = Color.blue;
+            this.enabled = false;
+        }
+        else
+        {
+            base.Die();
+        }
+    }
+
+    private void OnEnable()
+    {
+        //ChangeModel();
+    }
+
+    private void OnDisable()
+    {
+
+    }
+
+    private void ChangeModel()
+    {
+        if (_corpse)
+        {
+            Model.SetActive(true);
+            _corpse.Model.SetActive(false);
+        }
+    }
 }

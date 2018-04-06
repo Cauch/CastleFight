@@ -34,12 +34,19 @@ public class UIBuildingManager : UIItemManager
 
     private Transform _upgradesSubPanel;
     private Dictionary<IBuildingCost, Button> _buttons = new Dictionary<IBuildingCost, Button>();
+    private UIManager _uiManager;
 
     // Use this for initialization
     void Awake()
     {
         _upgradesSubPanel = this.transform.GetChild(1);
         _progressBar = this.transform.GetChild(2);
+    }
+
+    // Use this for initialization
+    void Start()
+    {
+        _uiManager = FindObjectOfType<UIManager>();
     }
 
     private void InstantiateButtons()
@@ -92,8 +99,15 @@ public class UIBuildingManager : UIItemManager
     // Update is called once per frame
     void Update()
     {
-        if (Building == null) return;
-        
+        if (Building == null)
+        {
+            return;
+        }
+
+        if(Building.Hp <= 0)
+        {
+            _uiManager.ReplacePanelDefault();
+        }
         HpText.text = "HP: " + Building.Hp.ToString() + "/" + Building.MaxHp.ToString();
         ArmorText.text = "Armor: " + Building.Armor.ToString();
         Image image = _progressBar.GetComponent<Image>();

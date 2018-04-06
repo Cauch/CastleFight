@@ -20,7 +20,7 @@ public abstract class GroundUnit : Unit
         base.Update();
 	}
 
-    protected override void Move(Attackable target)
+    protected override void Move(Targetable target)
     {
         _navMesh.SetDestination(target.transform.position);
         _navMesh.isStopped = false;
@@ -29,5 +29,21 @@ public abstract class GroundUnit : Unit
     protected override void StopMoving()
     {
         _navMesh.isStopped = true;
+    }
+
+    private void OnEnable()
+    {
+        if (_navMesh)
+        {
+            _navMesh.enabled = true;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (_navMesh)
+        {
+            _navMesh.enabled = false;
+        }
     }
 }

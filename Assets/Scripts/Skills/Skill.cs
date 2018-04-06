@@ -6,19 +6,26 @@ using UnityEngine;
 public abstract class Skill {
     const int BATTLE_FIELD_LAYER_MASK = 8;
 
-    public float range;
-    public Func<Attackable, bool> isValidTarget;
+    public float Range;
+    public Func<Targetable, bool> isValidTarget;
+
+    public Skill(float range, Func<Targetable, bool> isValidTarget)
+    {
+        this.Range = range;
+        this.isValidTarget = isValidTarget;
+    }
 
     public Skill(float range, Func<Attackable, bool> isValidTarget)
     {
-        this.range = range;
-        this.isValidTarget = isValidTarget;
+        this.Range = range;
+        this.isValidTarget = TargetingFunction.ToTargetableFunc(isValidTarget);
     }
-    public abstract void ApplyOnTarget(Attackable target);
+
+    public abstract void ApplyOnTarget(Targetable target);
 
     public bool IsUsable(Attackable attacker, Attackable target)
     {
-        return (IsMelee(attacker, target) || IsInRange(attacker, target)) && isValidTarget(target);
+        return (IsMelee(attacker, target) || TargetingFunction.IsInRangeorMelee(attacker, target, Range)) && isValidTarget(target);
     }
 
     bool IsMelee(Attackable attacker, Attackable target)
@@ -27,17 +34,5 @@ public abstract class Skill {
         Bounds tBounds = target.GetComponent<Collider>().bounds;
 
         return tBounds.Intersects(aBounds);
-    }
-
-    bool IsInRange(Attackable attacker, Attackable target)
-    {
-        return (target.transform.position - attacker.transform.position).sqrMagnitude < range * range;
-        //RaycastHit hitInfo;
-        //if(Physics.Raycast(attacker.transform.position, target.transform.position - attacker.transform.position, out hitInfo, this.range, BATTLE_FIELD_LAYER_MASK))
-        //{
-        //    return hitInfo.transform.GetInstanceID() == target.transform.GetInstanceID();
-        //}
-
-        //return false;
     }
 }
