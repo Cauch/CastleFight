@@ -5,16 +5,15 @@ public class MassHeal : ActiveSkill
 {
     public float heal;
     public float aoe;
-    protected List<IOffensiveModifier> modifiers;
 
-    public MassHeal(float initCd, float usePerSecond, float range, float executionTime, float heal, float aoe, Func<Attackable, bool> isValidTarget) : base(initCd, usePerSecond, range, executionTime, isValidTarget)
+    public MassHeal(float range, float refrehSpeed, float executionTime, Targetable caster, float heal, float aoe, Func<Targetable, bool> isValidTarget) : base(range, refrehSpeed, executionTime, caster, isValidTarget)
     {
         this.heal = heal;
         this.aoe = aoe;
     }
 
-    public override void ApplyOnTarget(Attackable target)
+    protected override void Complete()
     {
-        target.ModHp((heal));
+        (_target as Attackable).ModHp((heal));
     }
 }

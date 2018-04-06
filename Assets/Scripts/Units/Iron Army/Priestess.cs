@@ -1,48 +1,49 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Priestess : GroundUnit
 {
-    private Attack attack;
-    private Heal heal;
+    private Attack _attack;
+    private Heal _heal;
 
-    public override bool UseSkill()
+    public override ActiveSkill UseSkill()
     {
         bool atLeastOneTargetInRange = false;
 
-        List<Attackable> targets = TargetingFunction.DetectSurroundings(this, heal.isValidTarget);
+        IEnumerable<Attackable> targets = TargetingFunction.DetectSurroundings(this, _heal.isValidTarget).Cast<Attackable>();
 
         foreach (Attackable target in targets)
         {
-            bool targetInRange = heal.IsUsable(this, target);
+            bool targetInRange = _heal.IsUsable(this, target);
             atLeastOneTargetInRange = atLeastOneTargetInRange || targetInRange;
             if (targetInRange)
             {
-                if (heal.cooldown <= 0 && target.MaxHp - target.Hp > heal.heal)
+                if (_heal.Cooldown <= 0 && target.MaxHp - target.Hp > _heal.heal)
                 {
-                    heal.ApplyOnTarget(target);
-                    heal.cooldown = 1.0f;
-                    return true;
+                    _heal.ApplyOnTarget(target);
+                    _heal.Cooldown = 1.0f;
+                    return _heal;
                 }
             }
         }
 
-        return TargetingFunction.UseAttack(this, attack);
+        return TargetingFunction.UseAttack(this, _attack);
     }
 
     new private void Start()
     {
         base.Start();
 
-        attack = new Attack(0.5f, 1, 150, 1.0f, 14, (Attackable attackable) => TargetingFunction.IsEnemy(this, attackable));
-        heal = new Heal(0f, 0.125f, 240, 1.0f, 60f, (Attackable attackable) => TargetingFunction.IsAlly(this, attackable));
+        _attack = new Attack(150, 1.0f, this, 14, (Targetable attackable) => TargetingFunction.IsEnemy(this, attackable));
+        _heal = new Heal(240, 1.0f, 0.2f, this, 60f, (Targetable attackable) => TargetingFunction.IsAlly(this, attackable));
             
         _skills = new Skill[] 
         {
-            attack,
-            heal
+            _attack,
+            _heal
         };
     }
 }

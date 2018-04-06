@@ -25,7 +25,7 @@ public class Aura : Effect
 
     public override bool OnTick(Attackable target)
     {
-        Collider[] enemiesCollider = Physics.OverlapSphere(target.transform.position, range);
+        Collider[] enemiesCollider = Physics.OverlapSphere(target.transform.position, Range);
 
         foreach (Collider c in enemiesCollider)
         {

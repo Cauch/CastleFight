@@ -16,7 +16,7 @@ public abstract class FlyingUnit : Unit {
     }
 
 
-    protected override void Move(Attackable target)
+    protected override void Move(Targetable target)
     {
         Vector3 direction = new Vector3(target.transform.position.x - this.transform.position.x, 0f, target.transform.position.z - this.transform.position.z).normalized;
         this.transform.position += direction * DefaultSpeed;

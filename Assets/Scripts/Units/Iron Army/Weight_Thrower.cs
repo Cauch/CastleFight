@@ -7,7 +7,7 @@ public class Weight_Thrower : GroundUnit
     private Attack _attack;
     List<IOffensiveModifier> _modifiers;
 
-    public override bool UseSkill()
+    public override ActiveSkill UseSkill()
     {
         return TargetingFunction.UseAttack(this, _attack);
     }
@@ -20,7 +20,7 @@ public class Weight_Thrower : GroundUnit
         ArmorPierce armorPiercing = new ArmorPierce(0.6f);
         _modifiers.Add(armorPiercing);
 
-        _attack = new Attack(0.5f, 0.3f, 100, 1.0f, 60, _modifiers, (Attackable attackable) => TargetingFunction.IsEnemy(this, attackable));
+        _attack = new Attack(100, 1f / 0.3f, this, 60, _modifiers, (Targetable attackable) => TargetingFunction.IsEnemy(this, attackable));
 
         _skills = new Skill[]
         {

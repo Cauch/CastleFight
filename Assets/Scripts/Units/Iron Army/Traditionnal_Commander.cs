@@ -7,7 +7,7 @@ public class Traditionnal_Commander : GroundUnit
 {
     private Attack attack;
 
-    public override bool UseSkill()
+    public override ActiveSkill UseSkill()
     {
         return TargetingFunction.UseAttack(this, attack);
     }
@@ -24,7 +24,7 @@ public class Traditionnal_Commander : GroundUnit
 
         ArmorPierce armorPiercing = new ArmorPierce(0.5f);
         modifiers.Add(armorPiercing);
-        attack = new Attack(0.5f, 1.0f, 0, 1.0f, 45, modifiers, (Attackable attackable) => TargetingFunction.IsEnemy(this, attackable));
+        attack = new Attack(0f, 1.0f, this, 45, modifiers, (Targetable attackable) => TargetingFunction.IsEnemy(this, attackable));
 
         _skills = new[] { attack };
     }

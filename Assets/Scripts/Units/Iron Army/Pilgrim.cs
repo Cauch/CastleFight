@@ -7,7 +7,7 @@ public class Pilgrim : GroundUnit
 {
     private Attack attack;
 
-    public override bool UseSkill()
+    public override ActiveSkill UseSkill()
     {
         return TargetingFunction.UseAttack(this, attack);
     }
@@ -16,7 +16,7 @@ public class Pilgrim : GroundUnit
     {
         base.Start();
 
-        attack = new Attack(0.5f, 1, 0, 1.0f, 10, (Attackable attackable) => TargetingFunction.IsEnemy(this, attackable));
+        attack = new Attack(0, 1.0f, this, 10, (Targetable attackable) => TargetingFunction.IsEnemy(this, attackable));
         _skills = new[] { attack };
     }
 }

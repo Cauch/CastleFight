@@ -290,9 +290,11 @@
     <Compile Include="Assets\RTS_Camera\Scripts\RTS_Camera.cs" />
     <Compile Include="Assets\Scripts\Attackable.cs" />
     <Compile Include="Assets\Scripts\Builders\Builder.cs" />
+    <Compile Include="Assets\Scripts\Builders\HalfOnesBuilder.cs" />
     <Compile Include="Assets\Scripts\Builders\IronGripBuilder.cs" />
     <Compile Include="Assets\Scripts\Buildings\Building.cs" />
     <Compile Include="Assets\Scripts\Buildings\BuildingCost.cs" />
+    <Compile Include="Assets\Scripts\Buildings\Half Ones\HalfOnesBuildingCost.cs" />
     <Compile Include="Assets\Scripts\Buildings\IncomeBuilding.cs" />
     <Compile Include="Assets\Scripts\Buildings\Iron Army\IronGripBuildingCost.cs" />
     <Compile Include="Assets\Scripts\Buildings\Iron Army\IronMines.cs" />
@@ -302,13 +304,15 @@
     <Compile Include="Assets\Scripts\Buildings\UnitBuilding.cs" />
     <Compile Include="Assets\Scripts\CameraScript.cs" />
     <Compile Include="Assets\Scripts\Controller.cs" />
+    <Compile Include="Assets\Scripts\DevTools\Cheater.cs" />
     <Compile Include="Assets\Scripts\Helpers\GameSettings.cs" />
     <Compile Include="Assets\Scripts\Helpers\PanelType.cs" />
     <Compile Include="Assets\Scripts\Helpers\TargetingFunction.cs" />
     <Compile Include="Assets\Scripts\MouseManager.cs" />
+    <Compile Include="Assets\Scripts\Resources\Half Ones\Biomass.cs" />
     <Compile Include="Assets\Scripts\Resources\IResource.cs" />
-    <Compile Include="Assets\Scripts\Resources\ResourceFaith.cs" />
-    <Compile Include="Assets\Scripts\Resources\ResourceIron.cs" />
+    <Compile Include="Assets\Scripts\Resources\Iron Army\ResourceFaith.cs" />
+    <Compile Include="Assets\Scripts\Resources\Iron Army\ResourceIron.cs" />
     <Compile Include="Assets\Scripts\Selectable.cs" />
     <Compile Include="Assets\Scripts\SelectionIndicator.cs" />
     <Compile Include="Assets\Scripts\Skills\ActiveSkill.cs" />
@@ -316,6 +320,8 @@
     <Compile Include="Assets\Scripts\Skills\Auras\Aura.cs" />
     <Compile Include="Assets\Scripts\Skills\Buffs\Heal.cs" />
     <Compile Include="Assets\Scripts\Skills\Buffs\MassHeal.cs" />
+    <Compile Include="Assets\Scripts\Skills\ChannelSkill.cs" />
+    <Compile Include="Assets\Scripts\Skills\ChannelSkills\Infest.cs" />
     <Compile Include="Assets\Scripts\Skills\Effect.cs" />
     <Compile Include="Assets\Scripts\Skills\Effects\Defense.cs" />
     <Compile Include="Assets\Scripts\Skills\Effects\OvertimeHeal.cs" />
@@ -329,6 +335,7 @@
     <Compile Include="Assets\Scripts\Skills\Modifiers\OffensiveModifier\IOffensiveModifier.cs" />
     <Compile Include="Assets\Scripts\Skills\PassiveSkill.cs" />
     <Compile Include="Assets\Scripts\Skills\Skill.cs" />
+    <Compile Include="Assets\Scripts\Targetable.cs" />
     <Compile Include="Assets\Scripts\Tests\TestBuilder.cs" />
     <Compile Include="Assets\Scripts\Tests\TestBuilding.cs" />
     <Compile Include="Assets\Scripts\UI\UIBuilderManager.cs" />
@@ -337,8 +344,10 @@
     <Compile Include="Assets\Scripts\UI\UIManager.cs" />
     <Compile Include="Assets\Scripts\UI\UIProgressionBar.cs" />
     <Compile Include="Assets\Scripts\UI\UIUnitManager.cs" />
+    <Compile Include="Assets\Scripts\Units\Corpse.cs" />
     <Compile Include="Assets\Scripts\Units\FlyingUnit.cs" />
     <Compile Include="Assets\Scripts\Units\GroundUnit.cs" />
+    <Compile Include="Assets\Scripts\Units\Half Ones\Parasite.cs" />
     <Compile Include="Assets\Scripts\Units\Iron Army\Footman.cs" />
     <Compile Include="Assets\Scripts\Units\Iron Army\High_Priestess.cs" />
     <Compile Include="Assets\Scripts\Units\Iron Army\Light_Knight.cs" />

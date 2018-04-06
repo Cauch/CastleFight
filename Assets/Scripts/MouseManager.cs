@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using System.IO;
+using System.Linq;
 
 public class MouseManager : MonoBehaviour {
     const int LEFT_CLICK = 0;
@@ -98,6 +99,11 @@ public class MouseManager : MonoBehaviour {
 
     void UpdatePanel()
     {
-        uiManager.ReplacePanel(selectedObject.GetComponent<Selectable>());
+        IEnumerable<Selectable> selectables = selectedObject.GetComponents<Selectable>().Where(s=> s.enabled == true);
+
+        if (selectables.Any())
+        {
+            uiManager.ReplacePanel(selectables.First());
+        }
     }
 }

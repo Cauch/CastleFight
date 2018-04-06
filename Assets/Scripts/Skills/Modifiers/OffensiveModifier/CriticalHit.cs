@@ -17,7 +17,7 @@ public class CriticalHit : IOffensiveModifier
 
         if (crit < chance)
         {
-            attack.dmg *= multiplicator;
+            attack.Damage *= multiplicator;
         }
 
         return attack;

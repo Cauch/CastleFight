@@ -6,7 +6,7 @@ using UnityEngine;
 public class Light_Knight : GroundUnit
 {
     private Attack attack;
-    public override bool UseSkill()
+    public override ActiveSkill UseSkill()
     {
         return TargetingFunction.UseAttack(this, attack);
     }
@@ -18,7 +18,7 @@ public class Light_Knight : GroundUnit
 
         CriticalHit criticalHit = new CriticalHit(0.2f, 2.0f);
         modifiers.Add(criticalHit);
-        attack = new Attack(0.5f, 1.0f, 0, 1.0f, 45, modifiers, (Attackable attackable) => TargetingFunction.IsEnemy(this, attackable));
+        attack = new Attack(0, 1.0f, this, 45, modifiers, (Targetable attackable) => TargetingFunction.IsEnemy(this, attackable));
         _skills = new[] { attack };
     }
 }

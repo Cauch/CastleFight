@@ -2,16 +2,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System.Linq;
 public static class TargetingFunction {
-    public static List<Attackable> DetectSurroundings(Unit attacker, Func<Attackable, bool> isValidTarget)
+    public static Func<Targetable, bool> ToTargetableFunc(Func<Attackable, bool> func)
+    {
+        return (Targetable t) => IsAttackable(t) && func(t as Attackable);
+    }
+
+    public static IEnumerable<Attackable> DetectSurroundings(Unit attacker, Func<Attackable, bool> isValidTarget)
+    {
+        return DetectSurroundings(attacker, ToTargetableFunc(isValidTarget)).Cast<Attackable>();
+    }
+
+    public static List<Targetable> DetectSurroundings(Unit attacker, Func<Targetable, bool> isValidTarget)
     {
         Collider[] colliders = Physics.OverlapSphere(attacker.transform.position, attacker.DetectionRange);
-        List<Attackable> targets = new List<Attackable> { };
+        List<Targetable> targets = new List<Targetable> { };
 
         foreach (Collider c in colliders)
         {
-            Attackable target = c.gameObject.GetComponent<Attackable>();
+            Targetable target = c.gameObject.GetComponents<Targetable>().FirstOrDefault(t => t.enabled == true);
             if (isValidTarget(target))
             {
                 targets.Add(target);
@@ -21,11 +31,11 @@ public static class TargetingFunction {
         return targets;
     }
 
-    public static bool UseAttack(Unit attacker, Attack attack)
+    public static ActiveSkill UseAttack(Unit attacker, Attack attack)
     {
         bool atLeastOneTargetInRange = false;
 
-        List<Attackable> targets = TargetingFunction.DetectSurroundings(attacker, attack.isValidTarget);
+        IEnumerable<Attackable> targets = TargetingFunction.DetectSurroundings(attacker, attack.isValidTarget).Cast<Attackable>();
 
         foreach (Attackable target in targets)
         {
@@ -33,25 +43,25 @@ public static class TargetingFunction {
             atLeastOneTargetInRange = atLeastOneTargetInRange || targetInRange;
             if (targetInRange)
             {
-                if (attack.cooldown <= 0)
+                if (attack.Cooldown <= 0)
                 {
                     attack.ApplyOnTarget(target);
-                    attack.cooldown = 1.0f;
-                    return true;
+                    attack.Cooldown = 1.0f;
+                    return attack;
                 }
             }
         }
 
-        return atLeastOneTargetInRange;
+        return null;
     }
 
-    public static Attackable GetClosestEnemy(Unit attacker)
+    public static Targetable GetClosestEnemy(Unit attacker)
     {
-        Attackable target = attacker.EnemyCastle;
+        Targetable target = attacker.EnemyCastle;
 
         float closestDistanceSqr = attacker.DetectionRange;
 
-        foreach (Attackable potentialTarget in DetectSurroundings(attacker, (Attackable attackable) => TargetingFunction.IsEnemy(attacker, attackable)))
+        foreach (Targetable potentialTarget in DetectSurroundings(attacker, (Targetable Targetable) => TargetingFunction.IsEnemy(attacker, Targetable)))
         {
             Vector3 directionToTarget = potentialTarget.transform.position - attacker.transform.position;
             float dSqrToTarget = directionToTarget.sqrMagnitude;
@@ -65,14 +75,52 @@ public static class TargetingFunction {
         return target;
     }
 
-    public static bool IsEnemy(Attackable attacker, Attackable target)
+    public static bool IsEnemy(Targetable attacker, Targetable target)
     {
         if (attacker == null || target == null) return false;
-        return attacker.Allegiance != target.Allegiance && target.IsActive;
+        return attacker.Allegiance != target.Allegiance && target.IsActive && IsAttackable(target);
     }
-    public static bool IsAlly(Attackable attacker, Attackable target)
+    public static bool IsAlly(Targetable attacker, Targetable target)
     {
         if (attacker == null || target == null) return false;
-        return attacker.Allegiance == target.Allegiance;
+        return attacker.Allegiance == target.Allegiance && IsAttackable(target);
     }
+    public static bool IsUnit(Targetable Targetable)
+    {
+        return Targetable is Unit;
+    }
+
+    public static bool IsInRange(Vector3 v1, Vector3 v2, float range)
+    {
+        return (v1 - v2).sqrMagnitude <= Mathf.Pow(range, 2);
+    }
+
+    public static bool IsInRangeorMelee(MonoBehaviour m1, MonoBehaviour m2, float range)
+    {
+        if(m1 && m2)
+        {
+            return IsInRange(m1.transform.position, m2.transform.position, range) || IsMelee(m1, m2);
+        }
+        return false;
+       
+    }
+
+    public static bool IsMelee(MonoBehaviour m1, MonoBehaviour m2)
+    {
+        Bounds aBounds = m1.GetComponent<Collider>().bounds;
+        Bounds tBounds = m2.GetComponent<Collider>().bounds;
+
+        return tBounds.Intersects(aBounds);
+    }
+
+    public static bool IsCorpse(Targetable target)
+    {
+        return target is Corpse && (target as Corpse).enabled == true;
+    }
+
+    public static bool IsAttackable(Targetable target)
+    {
+        return target is Attackable && (target as Attackable).enabled == true;
+    }
+
 }

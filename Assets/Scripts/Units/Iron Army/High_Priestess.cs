@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class High_Priestess : GroundUnit
@@ -8,11 +9,11 @@ public class High_Priestess : GroundUnit
     private Aura _healingAura;
     private OvertimeHeal _overtimeHeal;
 
-    public override bool UseSkill()
+    public override ActiveSkill UseSkill()
     {
         bool atLeastOneTargetInRange = false;
 
-        List<Attackable> targets = TargetingFunction.DetectSurroundings(this, _massHeal.isValidTarget);
+        IEnumerable<Attackable> targets = TargetingFunction.DetectSurroundings(this, _massHeal.isValidTarget).Cast<Attackable>();
 
         foreach (Attackable target in targets)
         {
@@ -20,7 +21,7 @@ public class High_Priestess : GroundUnit
             atLeastOneTargetInRange = atLeastOneTargetInRange || targetInRange;
             if (targetInRange)
             {
-                if (_massHeal.cooldown <= 0 && target.MaxHp - target.Hp > _massHeal.heal)
+                if (_massHeal.Cooldown <= 0 && target.MaxHp - target.Hp > _massHeal.heal)
                 {
                     foreach (Attackable ally in targets)
                     {
@@ -30,8 +31,8 @@ public class High_Priestess : GroundUnit
                             _massHeal.ApplyOnTarget(target);
                         }
                     }
-                    _massHeal.cooldown = 1.0f;
-                    return true;
+                    _massHeal.Cooldown = 1.0f;
+                    return _massHeal;
                 }
             }
         }
@@ -43,8 +44,8 @@ public class High_Priestess : GroundUnit
     {
         base.Start();
 
-        _attack = new Attack(0.5f, 1, 150, 1.0f, 25, (Attackable attackable) => TargetingFunction.IsEnemy(this, attackable));
-        _massHeal = new MassHeal(0f, 0.125f, 240, 1.0f, 60f, 75f, (Attackable attackable) => TargetingFunction.IsAlly(this, attackable));
+        _attack = new Attack(150, 1.0f, this, 25, (Targetable attackable) => TargetingFunction.IsEnemy(this, attackable));
+        _massHeal = new MassHeal(240, 1.0f, 0.2f, this, 60f, 75f, (Targetable attackable) => TargetingFunction.IsAlly(this, attackable));
         _overtimeHeal = new OvertimeHeal(2f, (Attackable attackable) => TargetingFunction.IsAlly(this, attackable));
         _healingAura = new Aura(75f, _overtimeHeal);
 
