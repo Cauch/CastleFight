@@ -22,13 +22,19 @@ public abstract class GroundUnit : Unit
 
     protected override void Move(Targetable target)
     {
-        _navMesh.SetDestination(target.transform.position);
-        _navMesh.isStopped = false;
+        if (_navMesh.enabled)
+        {
+            _navMesh.SetDestination(target.transform.position);
+            _navMesh.isStopped = false;
+        }
     }
 
     protected override void StopMoving()
     {
-        _navMesh.isStopped = true;
+        if (_navMesh.enabled)
+        {
+            _navMesh.isStopped = true;
+        }
     }
 
     private void OnEnable()

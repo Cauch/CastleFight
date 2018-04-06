@@ -8,38 +8,37 @@ using System.Linq;
 public class MouseManager : MonoBehaviour {
     const int LEFT_CLICK = 0;
 
-    public GameObject defaultSelection;
-    public GameObject hoveredObject;
-    public GameObject selectedObject;
+    public GameObject DefaultSelection;
+    public GameObject HoveredObject;
+    public GameObject SelectedObject;
 
-    public GameObject thrashCode;
-    public UIManager uiManager;
+    public UIManager UiManager;
 
-    public Color previousHoveredColor;
-    public Color previousSelectedColor;
+    public Color PreviousHoveredColor;
+    public Color PreviousSelectedColor;
 
-    private GameObject previousSelectedObject;
+    private GameObject _previousSelectedObject;
 
     const int UI_POINTER = -1;
 
     // Use this for initialization
     void Start () {
-        selectedObject = previousSelectedObject = hoveredObject = defaultSelection;
+        SelectedObject = _previousSelectedObject = HoveredObject = DefaultSelection;
         UpdatePanel();
     }
 
     // Update is called once per frame
     void Update () {
-        previousSelectedObject = selectedObject;
+        _previousSelectedObject = SelectedObject;
         //Look if selectedObject was destroyed
-        if(selectedObject == null) { selectedObject = defaultSelection; }
+        if(SelectedObject == null) { SelectedObject = DefaultSelection; }
         if (EventSystem.current.IsPointerOverGameObject(UI_POINTER)) {
             
         } else {
             LookForHover();
             LookForSelect();
         }
-        if(selectedObject != previousSelectedObject)
+        if(SelectedObject != _previousSelectedObject)
         {
             UpdatePanel();
         }
@@ -58,7 +57,7 @@ public class MouseManager : MonoBehaviour {
         }
         else
         {
-            Clear(ref hoveredObject);
+            Clear(ref HoveredObject);
         }
     }
     
@@ -66,25 +65,25 @@ public class MouseManager : MonoBehaviour {
     {
         if (Input.GetMouseButtonDown(LEFT_CLICK))
         {
-            if (selectedObject == hoveredObject)
+            if (SelectedObject == HoveredObject)
             {
                 return;
             }
 
-            Clear(ref selectedObject);
+            Clear(ref SelectedObject);
 
-            Selectable obj = hoveredObject.GetComponent<Selectable>();
+            Selectable obj = HoveredObject.GetComponent<Selectable>();
             if ( obj != null)
             {
                 obj.IsSelected = true;
-                selectedObject = hoveredObject;
+                SelectedObject = HoveredObject;
             }
         }
     }
 
     void HoverObject(GameObject selection)
     {
-        hoveredObject = selection;
+        HoveredObject = selection;
         Selectable obj = selection.GetComponent<Selectable>();
     }
 
@@ -94,16 +93,16 @@ public class MouseManager : MonoBehaviour {
         
         Selectable s = obj.GetComponent<Selectable>();
         if (s != null) s.IsSelected = false;
-        obj = defaultSelection;
+        obj = DefaultSelection;
     }
 
     void UpdatePanel()
     {
-        IEnumerable<Selectable> selectables = selectedObject.GetComponents<Selectable>().Where(s=> s.enabled == true);
+        IEnumerable<Selectable> selectables = SelectedObject.GetComponents<Selectable>().Where(s=> s.enabled == true);
 
         if (selectables.Any())
         {
-            uiManager.ReplacePanel(selectables.First());
+            UiManager.ReplacePanel(selectables.First());
         }
     }
 }

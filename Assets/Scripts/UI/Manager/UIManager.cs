@@ -8,6 +8,8 @@ public class UIManager : MonoBehaviour {
     public GameObject BuildingPanel;
     public GameObject UnitPanel;
 
+    public GameObject ResourcePanel;
+
     GameObject _currentPanel;
     GameObject _canvas;
 
@@ -20,6 +22,7 @@ public class UIManager : MonoBehaviour {
         BuilderPanel = Instantiate(BuilderPanel, _canvas.transform);
         BuildingPanel = Instantiate(BuildingPanel, _canvas.transform);
         UnitPanel = Instantiate(UnitPanel, _canvas.transform);
+        ResourcePanel = Instantiate(ResourcePanel, _canvas.transform);
 
         _currentPanel = BuildingPanel;
         BuildingPanel.SetActive(false);
@@ -44,8 +47,10 @@ public class UIManager : MonoBehaviour {
             case PanelType.BUILDER:
                 Builder builder = selectable.GetComponent<Builder>();
                 UIBuilderManager builderManager = BuilderPanel.GetComponent<UIBuilderManager>();
+                UIResourceManager resourceManager = ResourcePanel.GetComponent<UIResourceManager>();
 
                 builderManager.Builder = builder;
+                resourceManager.Builder = builder;
                 ReplacePanel(BuilderPanel);
                 break;
             case PanelType.BUILDING:

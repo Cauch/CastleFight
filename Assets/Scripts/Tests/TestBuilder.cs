@@ -41,8 +41,8 @@ public class TestBuilder : MonoBehaviour
 
         uiManager = Instantiate(uiManager);
         uiManager.GetComponent<UIManager>().DefaultSelectable = playerInstance.GetComponent<Selectable>();
-        mouseManager.GetComponent<MouseManager>().defaultSelection = playerInstance;
-        mouseManager.GetComponent<MouseManager>().uiManager = uiManager.GetComponent<UIManager>();
+        mouseManager.GetComponent<MouseManager>().DefaultSelection = playerInstance;
+        mouseManager.GetComponent<MouseManager>().UiManager = uiManager.GetComponent<UIManager>();
 
         Instantiate(mouseManager);
 

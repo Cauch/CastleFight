@@ -6,15 +6,15 @@ public class SelectionIndicator : MonoBehaviour {
     MouseManager mm;
 	// Use this for initialization
 	void Start () {
-        mm = GameObject.FindObjectOfType<MouseManager>();
+        mm = FindObjectOfType<MouseManager>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        if(mm.selectedObject != null)
+        if(mm.SelectedObject != null)
         {
-            Bounds bigBounds = mm.selectedObject.GetComponentInChildren<Renderer>().bounds;
-            Renderer[] rs = mm.selectedObject.GetComponentsInChildren<Renderer>();
+            Bounds bigBounds = mm.SelectedObject.GetComponentInChildren<Renderer>().bounds;
+            Renderer[] rs = mm.SelectedObject.GetComponentsInChildren<Renderer>();
 
             foreach(Renderer r in rs) {
                 bigBounds.Encapsulate(r.bounds);

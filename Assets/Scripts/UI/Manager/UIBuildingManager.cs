@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIBuildingManager : UIItemManager
+public class UIBuildingManager : MonoBehaviour
 {
     public Text HpText;
     public Text ArmorText;

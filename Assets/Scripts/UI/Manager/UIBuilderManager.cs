@@ -17,27 +17,21 @@ public class UIBuilderManager : MonoBehaviour {
                 // Could be avoided if Builders panels are memorized
                 _builder = value;
                 DestroyButtons();
-                DestroyTexts();
-                InstantiateTexts();
                 InstantiateButtons();
             }
         }
     }
     public GameObject ButtonTemplate;
-    public GameObject TextTemplate;
     public GameObject BuildingPreviewDefault;
 
     private GameObject _buildingPreview;
     private Transform _buidlingsSubPanel;
-    private Transform _resourcesSubPanel;
 
-    private Dictionary<IResource, Text> _texts = new Dictionary<IResource,Text>();
     private Dictionary<IBuildingCost, Button> _buttons = new Dictionary<IBuildingCost, Button>();
 
     // Use this for initialization
     void Awake () {
         _buidlingsSubPanel = this.transform.GetChild(0);
-        _resourcesSubPanel = this.transform.GetChild(1);
     }
 
     private void InstantiateButtons()
@@ -60,15 +54,6 @@ public class UIBuilderManager : MonoBehaviour {
         }
     }
 
-    private void InstantiateTexts()
-    {
-        foreach (IResource resource in Builder.Resources)
-        {
-            GameObject text = Instantiate(TextTemplate, _resourcesSubPanel);
-            _texts.Add(resource, text.GetComponent<Text>());
-        }
-    }
-
     private void DestroyButtons()
     {
         foreach (KeyValuePair<IBuildingCost, Button> kv in _buttons)
@@ -79,24 +64,9 @@ public class UIBuilderManager : MonoBehaviour {
         _buttons.Clear();
     }
 
-    private void DestroyTexts()
-    {
-        foreach (KeyValuePair<IResource, Text> kv in _texts)
-        {
-            Destroy(kv.Value.gameObject);
-        }
-
-        _texts.Clear();
-    }
-
     private void Update()
     {
         if (Builder == null) return;
-
-        foreach (IResource resource in Builder.Resources)
-        {
-            _texts[resource].text = resource.ToString();
-        }
 
         foreach (KeyValuePair<IBuildingCost, Button> buildingButton in _buttons)
         {
