@@ -31,8 +31,11 @@ public class Paladin : GroundUnit
 
         defensiveModifiers.Add(_block);
 
-        _attack = new Attack(0, 1.0f, this, 10, modifiers, (Targetable attackable) => TargetingFunction.IsEnemy(this, attackable));
+        _attack = new Attack(0, 1.0f, this, 10, (Targetable attackable) => TargetingFunction.IsEnemy(this, attackable))
+        {
+            Modifiers = modifiers
+        };
 
-        _skills = new[] { _attack };
+        Skills = new[] { _attack };
     }
 }

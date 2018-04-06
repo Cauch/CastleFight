@@ -9,20 +9,15 @@ public class Defense : Effect {
         this.physicalArmorMultiplicator = physicalArmorMultiplicator;
     }
 
-    public override bool OnApply(Attackable target)
+    public override void OnApply(Targetable target)
     {
-        target.ArmorMods += physicalArmorMultiplicator * target.BaseArmor;
-        return true;
+        Attackable attackable = target as Attackable;
+        attackable.ArmorMods += physicalArmorMultiplicator * attackable.BaseArmor;
     }
 
-    public override bool OnRemove(Attackable target)
+    public override void OnRemove(Targetable target)
     {
-        target.ArmorMods -= physicalArmorMultiplicator * target.BaseArmor;
-        return true;
-    }
-
-    public override bool OnTick(Attackable target)
-    {
-        return true;
+        Attackable attackable = target as Attackable;
+        attackable.ArmorMods -= physicalArmorMultiplicator * attackable.BaseArmor;
     }
 }

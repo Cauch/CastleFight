@@ -49,7 +49,7 @@ public abstract class ActiveSkill : Skill {
 
     protected bool CheckForBreak()
     {
-        if (!TargetingFunction.IsInRangeorMelee(Caster, _target, this.Range) || !isValidTarget(_target))
+        if (!TargetingFunction.IsInRangeorMelee(Caster, _target, this.Range) || !IsValidTarget(_target))
         {
             Break();
             return true;

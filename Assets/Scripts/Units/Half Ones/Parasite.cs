@@ -12,7 +12,7 @@ public class Parasite : GroundUnit
     {
         bool atLeastOneTargetInRange = false;
 
-        IEnumerable<Corpse> targets = TargetingFunction.DetectSurroundings(this, _infest.isValidTarget).Cast<Corpse>();
+        IEnumerable<Corpse> targets = TargetingFunction.DetectSurroundings(this, _infest.IsValidTarget).Cast<Corpse>();
 
         foreach (Corpse target in targets)
         {
@@ -35,7 +35,11 @@ public class Parasite : GroundUnit
     {
         base.Start();
         _infest = new Infest(0, 0, 2.5f, this, 0.3f, TargetingFunction.IsCorpse);
-        _attack = new Attack(0, 1.0f / 0.8f, this, 20, (Targetable attackable) => TargetingFunction.IsEnemy(this, attackable));
-        _skills = new[] { _attack };
+        _attack = new Attack(0, 1.0f / 0.8f, this, 12, (Targetable attackable) => TargetingFunction.IsEnemy(this, attackable))
+        {
+            Effects = new List<Effect> { new Neurotoxin(0.2f, 0.2f, 1, (Targetable attackable) => TargetingFunction.IsEnemyUnit(this, attackable)) { Duration = 3} }
+        };
+
+        Skills = new[] { _attack };
     }
 }

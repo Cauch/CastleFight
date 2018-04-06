@@ -5,11 +5,11 @@ using UnityEngine;
 
 public class Traditionnal_Commander : GroundUnit
 {
-    private Attack attack;
+    private Attack _attack;
 
     public override ActiveSkill UseSkill()
     {
-        return TargetingFunction.UseAttack(this, attack);
+        return TargetingFunction.UseAttack(this, _attack);
     }
 
     new private void Start()
@@ -17,15 +17,18 @@ public class Traditionnal_Commander : GroundUnit
         base.Start();
         List<IOffensiveModifier> modifiers = new List<IOffensiveModifier>();
 
-        Defense def = new Defense(0.2f, (Attackable target) => TargetingFunction.IsAlly(this, target));
+        Defense def = new Defense(0.2f, (Attackable target) => TargetingFunction.IsAllyUnit(this, target));
         Aura armorAura = new Aura(80, def);
 
         armorAura.ApplyOnTarget(this);
 
         ArmorPierce armorPiercing = new ArmorPierce(0.5f);
         modifiers.Add(armorPiercing);
-        attack = new Attack(0f, 1.0f, this, 45, modifiers, (Targetable attackable) => TargetingFunction.IsEnemy(this, attackable));
+        _attack = new Attack(0f, 1.0f, this, 45, (Targetable attackable) => TargetingFunction.IsEnemy(this, attackable))
+        {
+            Modifiers = modifiers
+        };
 
-        _skills = new[] { attack };
+        Skills = new[] { _attack };
     }
 }

@@ -20,7 +20,11 @@ public class Traditionnal_Knight : GroundUnit
 
         ArmorPierce armorPiercing = new ArmorPierce(0.5f);
         modifiers.Add(armorPiercing);
-        attack = new Attack(0.0f, 1.0f / 0.8f, this, 40, modifiers, (Targetable attackable) => TargetingFunction.IsEnemy(this, attackable));
-        _skills = new[] { attack };
+        attack = new Attack(0.0f, 1.0f / 0.8f, this, 40, (Targetable attackable) => TargetingFunction.IsEnemy(this, attackable))
+        {
+            Modifiers = modifiers
+        };
+
+        Skills = new[] { attack };
     }
 }

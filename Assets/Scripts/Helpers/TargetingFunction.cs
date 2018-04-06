@@ -35,7 +35,7 @@ public static class TargetingFunction {
     {
         bool atLeastOneTargetInRange = false;
 
-        IEnumerable<Attackable> targets = TargetingFunction.DetectSurroundings(attacker, attack.isValidTarget).Cast<Attackable>();
+        IEnumerable<Attackable> targets = TargetingFunction.DetectSurroundings(attacker, attack.IsValidTarget).Cast<Attackable>();
 
         foreach (Attackable target in targets)
         {
@@ -80,11 +80,25 @@ public static class TargetingFunction {
         if (attacker == null || target == null) return false;
         return attacker.Allegiance != target.Allegiance && target.IsActive && IsAttackable(target);
     }
+
+    public static bool IsEnemyUnit(Targetable attacker, Targetable target)
+    {
+        if (attacker == null || target == null) return false;
+        return attacker.Allegiance != target.Allegiance && target.IsActive && IsUnit(target);
+    }
+
     public static bool IsAlly(Targetable attacker, Targetable target)
     {
         if (attacker == null || target == null) return false;
         return attacker.Allegiance == target.Allegiance && IsAttackable(target);
     }
+
+    public static bool IsAllyUnit(Targetable attacker, Targetable target)
+    {
+        if (attacker == null || target == null) return false;
+        return attacker.Allegiance == target.Allegiance && IsUnit(target);
+    }
+
     public static bool IsUnit(Targetable Targetable)
     {
         return Targetable is Unit;

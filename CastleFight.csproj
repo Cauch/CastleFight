@@ -324,6 +324,7 @@
     <Compile Include="Assets\Scripts\Skills\ChannelSkills\Infest.cs" />
     <Compile Include="Assets\Scripts\Skills\Effect.cs" />
     <Compile Include="Assets\Scripts\Skills\Effects\Defense.cs" />
+    <Compile Include="Assets\Scripts\Skills\Effects\Neurotoxin.cs" />
     <Compile Include="Assets\Scripts\Skills\Effects\OvertimeHeal.cs" />
     <Compile Include="Assets\Scripts\Skills\Effects\Poison.cs" />
     <Compile Include="Assets\Scripts\Skills\Modifiers\DefensiveModifier\Block.cs" />

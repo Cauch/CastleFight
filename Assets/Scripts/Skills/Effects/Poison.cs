@@ -21,22 +21,22 @@ public class Poison : Effect
         target.AddEffect(this);
     }
 
-    public override bool OnApply(Attackable target)
+    public override void OnApply(Targetable target)
     {
-        tickTime = 1;
-        target.ModHp(-initialDmg);
-        return true;
+        Attackable attackable = target as Attackable;
+        TickTime = 1;
+        attackable.AddHp(-initialDmg);
     }
 
-    public override bool OnRemove(Attackable target)
+    public override void OnRemove(Targetable target)
     {
-        target.ModHp(-removeDmg);
-        return true;
+        Attackable attackable = target as Attackable;
+        attackable.AddHp(-removeDmg);
     }
 
-    public override bool OnTick(Attackable target)
+    public override void OnTick(Targetable target)
     {
-        target.ModHp(-tickDmg);
-        return true;
+        Attackable attackable = target as Attackable;
+        attackable.AddHp(-tickDmg);
     }
 }

@@ -14,6 +14,6 @@ public class MassHeal : ActiveSkill
 
     protected override void Complete()
     {
-        (_target as Attackable).ModHp((heal));
+        (_target as Attackable).AddHp((heal));
     }
 }

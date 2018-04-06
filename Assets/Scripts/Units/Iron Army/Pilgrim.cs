@@ -17,6 +17,6 @@ public class Pilgrim : GroundUnit
         base.Start();
 
         attack = new Attack(0, 1.0f, this, 10, (Targetable attackable) => TargetingFunction.IsEnemy(this, attackable));
-        _skills = new[] { attack };
+        Skills = new[] { attack };
     }
 }

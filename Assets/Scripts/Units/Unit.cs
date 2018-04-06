@@ -15,11 +15,13 @@ public abstract class Unit : Attackable {
     public GameObject Model;
 
     public float DefaultSpeed;
+    public float Speed;
     public float DetectionRange;
+
+    public Skill[] Skills;
 
     // Protected Attributes
     protected float _speedModifier;
-    protected Skill[] _skills;
     protected float _generalColdown;
 
     // Abstract Methods
@@ -71,7 +73,7 @@ public abstract class Unit : Attackable {
 
     void RefreshCooldown()
     {
-        foreach (ActiveSkill skill in _skills)
+        foreach (ActiveSkill skill in Skills)
         {
             skill.Cooldown -= (Time.deltaTime * skill.SkillRefreshSpeed);
         }
@@ -131,4 +133,6 @@ public abstract class Unit : Attackable {
             _corpse.Model.SetActive(false);
         }
     }
+
+    public abstract void SetSpeed(float speed);
 }

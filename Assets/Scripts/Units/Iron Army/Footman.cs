@@ -21,7 +21,11 @@ public class Footman : GroundUnit
         ArmorPierce armorPiercing = new ArmorPierce(0.3f);
         modifiers.Add(armorPiercing);
 
-        _attack = new Attack(0, 1.0f / 0.8f, this, 20, modifiers, (Targetable attackable) => TargetingFunction.IsEnemy(this, attackable));
-        _skills = new[] { _attack };
+        _attack = new Attack(0, 1.0f / 0.8f, this, 20, (Targetable attackable) => TargetingFunction.IsEnemy(this, attackable))
+        {
+            Modifiers = modifiers
+        };
+
+        Skills = new[] { _attack };
     }
 }
