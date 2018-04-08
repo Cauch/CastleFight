@@ -8,19 +8,9 @@ public class OvertimeHeal : Effect
         this.heal = heal;
     }
 
-    public override bool OnApply(Attackable target)
+    public override void OnTick(Targetable target)
     {
-        return true;
-    }
-
-    public override bool OnRemove(Attackable target)
-    {
-        return true;
-    }
-
-    public override bool OnTick(Attackable target)
-    {
-        target.Hp = Math.Min(target.Hp + heal, target.MaxHp);
-        return true;
+        Attackable attackable = target as Attackable;
+        attackable.AddHp(heal);
     }
 }

@@ -7,6 +7,7 @@ public class UIUnitManager : MonoBehaviour
 {
     public Text HpText;
     public Text ArmorText;
+    public Text DescriptionText;
     public Unit Unit;
 
     private UIManager _uiManager;
@@ -27,5 +28,6 @@ public class UIUnitManager : MonoBehaviour
         }
         HpText.text = "HP: " + Unit.Hp.ToString() + "/" + Unit.MaxHp.ToString();
         ArmorText.text = "Armor: " + Unit.Armor.ToString();
+        DescriptionText.text = Unit.ToString();
     }
 }

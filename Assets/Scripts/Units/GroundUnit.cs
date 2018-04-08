@@ -52,4 +52,9 @@ public abstract class GroundUnit : Unit
             _navMesh.enabled = false;
         }
     }
+
+    public override void SetSpeed(float speed)
+    {
+        _navMesh.speed = speed;
+    }
 }

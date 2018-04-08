@@ -4,12 +4,12 @@ using System.Linq;
 using UnityEngine;
 
 public class Targetable : Selectable {
-    protected List<Effect> effects;
+    protected List<Effect> _effects;
 
     new protected virtual void Start()
     {
         base.Start();
-        effects = new List<Effect>();
+        _effects = new List<Effect>();
     }
 
     protected void Update()
@@ -21,12 +21,12 @@ public class Targetable : Selectable {
     void TriggerEffects()
     {
         //Tick time should be in this class, for cacheline reason ?
-        for (int i = 0; i < effects.Count; i++)
+        for (int i = 0; i < _effects.Count; i++)
         {
-            if (effects[i].tickTime < 0)
+            if (_effects[i].TickTime < 0)
             {
-                effects[i].OnTick(this);
-                effects[i].tickTime = 1;
+                _effects[i].OnTick(this);
+                _effects[i].TickTime = 1;
             }
         }
     }
@@ -34,11 +34,11 @@ public class Targetable : Selectable {
     void RefreshEffects()
     {
         List<Effect> effectToRemove = new List<Effect>();
-        foreach (Effect effect in effects)
+        foreach (Effect effect in _effects)
         {
-            effect.tickTime -= effect.tickSpeed * Time.deltaTime;
-            effect.appliedTime += Time.deltaTime;
-            if (effect.duration < effect.appliedTime)
+            effect.TickTime -= effect.TickSpeed * Time.deltaTime;
+            effect.AppliedTime += Time.deltaTime;
+            if (effect.Duration < effect.AppliedTime)
             {
                 effect.OnRemove(this);
                 effectToRemove.Add(effect);
@@ -47,7 +47,7 @@ public class Targetable : Selectable {
 
         foreach (Effect effect in effectToRemove)
         {
-            effects.Remove(effect);
+            _effects.Remove(effect);
         }
     }
 
@@ -60,12 +60,12 @@ public class Targetable : Selectable {
         else
         {
             effect.OnApply(this);
-            effects.Add(effect);
+            _effects.Add(effect);
         }
     }
 
     public bool AlreadyAffected(Effect effect)
     {
-        return effects.Where(t => t.GetType() == effect.GetType()).Any();
+        return _effects.Where(t => t.GetType() == effect.GetType()).Any();
     }
 }

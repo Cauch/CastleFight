@@ -13,7 +13,7 @@ public class High_Priestess : GroundUnit
     {
         bool atLeastOneTargetInRange = false;
 
-        IEnumerable<Attackable> targets = TargetingFunction.DetectSurroundings(this, _massHeal.isValidTarget).Cast<Attackable>();
+        IEnumerable<Attackable> targets = TargetingFunction.DetectSurroundings(this, _massHeal.IsValidTarget).Cast<Attackable>();
 
         foreach (Attackable target in targets)
         {
@@ -45,13 +45,13 @@ public class High_Priestess : GroundUnit
         base.Start();
 
         _attack = new Attack(150, 1.0f, this, 25, (Targetable attackable) => TargetingFunction.IsEnemy(this, attackable));
-        _massHeal = new MassHeal(240, 1.0f, 0.2f, this, 60f, 75f, (Targetable attackable) => TargetingFunction.IsAlly(this, attackable));
-        _overtimeHeal = new OvertimeHeal(2f, (Attackable attackable) => TargetingFunction.IsAlly(this, attackable));
+        _massHeal = new MassHeal(240, 1.0f, 0.2f, this, 60f, 75f, (Targetable attackable) => TargetingFunction.IsAllyUnit(this, attackable));
+        _overtimeHeal = new OvertimeHeal(2f, (Attackable attackable) => TargetingFunction.IsAllyUnit(this, attackable));
         _healingAura = new Aura(75f, _overtimeHeal);
 
         _healingAura.ApplyOnTarget(this);
 
-        _skills = new Skill[]
+        Skills = new Skill[]
         {
             _attack,
             _massHeal

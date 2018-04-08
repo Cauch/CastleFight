@@ -7,6 +7,7 @@ public abstract class ActiveSkill : Skill {
     public float Cooldown;
     public float SkillRefreshSpeed;
     public float ExecutionTime;
+    public bool Interrupt;
 
     public Targetable Caster;
     
@@ -23,6 +24,7 @@ public abstract class ActiveSkill : Skill {
 
     public override void ApplyOnTarget(Targetable target)
     {
+        Interrupt = false;
         _target = target;
         _beginingExecution = Time.time;
     }
@@ -30,7 +32,7 @@ public abstract class ActiveSkill : Skill {
     // Kind of sketchy system
     public virtual ActiveSkill Update()
     {
-        if (CheckForBreak() || CheckForCompletion())
+        if (CheckForBreak() || CheckForCompletion() || Interrupt)
         {
             return null;
         }
@@ -49,7 +51,7 @@ public abstract class ActiveSkill : Skill {
 
     protected bool CheckForBreak()
     {
-        if (!TargetingFunction.IsInRangeorMelee(Caster, _target, this.Range) || !isValidTarget(_target))
+        if (!TargetingFunction.IsInRangeorMelee(Caster, _target, this.Range) || !IsValidTarget(_target))
         {
             Break();
             return true;
@@ -59,7 +61,7 @@ public abstract class ActiveSkill : Skill {
 
     public virtual void Break()
     {
-
+        Interrupt = true;
     }
     protected abstract void Complete();
 }

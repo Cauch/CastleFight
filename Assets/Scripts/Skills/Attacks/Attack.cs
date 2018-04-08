@@ -6,24 +6,21 @@ using UnityEngine;
 public class Attack : ActiveSkill
 {
     public float Damage;
-    protected List<IOffensiveModifier> _modifiers;
+    public List<IOffensiveModifier> Modifiers;
+    public List<Effect> Effects;
 
-    public Attack(float range, float skillRefreshSpeed, Targetable caster, int dmg, List<IOffensiveModifier> modifiers, Func<Targetable, bool> isValidTarget) : base(range, skillRefreshSpeed, skillRefreshSpeed, caster, isValidTarget)
+    public Attack(float range, float skillRefreshSpeed, Targetable caster, int dmg, Func<Targetable, bool> isValidTarget, List<IOffensiveModifier> modifiers = null, List<Effect> effects = null) : base(range, skillRefreshSpeed, skillRefreshSpeed, caster, isValidTarget)
     {
         Damage = dmg;
-        _modifiers = modifiers;
+        Modifiers = modifiers ?? new List<IOffensiveModifier>();
+        Effects = effects ?? new List<Effect>();
     }
 
-    public Attack(float range, float skillRefreshSpeed, Targetable caster, int dmg, Func<Targetable, bool> isValidTarget) : base(range, skillRefreshSpeed, skillRefreshSpeed, caster, isValidTarget)
-    {
-        Damage = dmg;
-        _modifiers = new List<IOffensiveModifier>();
-    }
-
-    public Attack(Attack attack) : base(attack.Range, attack.SkillRefreshSpeed, attack.SkillRefreshSpeed, attack.Caster, attack.isValidTarget)
+    public Attack(Attack attack) : base(attack.Range, attack.SkillRefreshSpeed, attack.SkillRefreshSpeed, attack.Caster, attack.IsValidTarget)
     {
         Damage = attack.Damage;
-        _modifiers = attack._modifiers; //Sketchy for a copy constructor. Not a true copy of the list
+        Modifiers = attack.Modifiers; //Sketchy for a copy constructor. Not a true copy of the list
+        Effects = attack.Effects;
     }
 
     protected override void Complete()
@@ -31,7 +28,13 @@ public class Attack : ActiveSkill
         Attackable attackable = _target as Attackable;
         Attack attack = new Attack(this);
         float armor = attackable.Armor;
-        foreach(IOffensiveModifier modifier in _modifiers)
+
+        foreach(Effect effect in Effects)
+        {
+            effect.ApplyOnTarget(_target);
+        }
+
+        foreach(IOffensiveModifier modifier in Modifiers)
         {
             attack = modifier.ModifyAttack(attack);
             armor = modifier.ModifyDefense(armor);
@@ -44,7 +47,7 @@ public class Attack : ActiveSkill
         }
 
         float totalDmg = attack.CalculateNegativeDmg() * (1 - armor / 100f);
-        attackable.ModHp(totalDmg);
+        attackable.AddHp(totalDmg);
     }
 
     protected virtual float CalculateNegativeDmg()

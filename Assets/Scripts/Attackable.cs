@@ -18,7 +18,7 @@ public abstract class Attackable : Targetable {
         private set { throw new System.Exception(); }
     }
 
-    public void ModHp(float hp){ this.Hp = Mathf.Min(this.Hp + hp, MaxHp); }
+    public void AddHp(float hp){ this.Hp = Mathf.Min(this.Hp + hp, MaxHp); }
     public void ModAllegiance(bool allegiance) { this.Allegiance = allegiance; }
 
     new protected virtual void Start()

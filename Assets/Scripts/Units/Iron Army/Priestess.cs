@@ -13,7 +13,7 @@ public class Priestess : GroundUnit
     {
         bool atLeastOneTargetInRange = false;
 
-        IEnumerable<Attackable> targets = TargetingFunction.DetectSurroundings(this, _heal.isValidTarget).Cast<Attackable>();
+        IEnumerable<Attackable> targets = TargetingFunction.DetectSurroundings(this, _heal.IsValidTarget).Cast<Attackable>();
 
         foreach (Attackable target in targets)
         {
@@ -38,9 +38,9 @@ public class Priestess : GroundUnit
         base.Start();
 
         _attack = new Attack(150, 1.0f, this, 14, (Targetable attackable) => TargetingFunction.IsEnemy(this, attackable));
-        _heal = new Heal(240, 1.0f, 0.2f, this, 60f, (Targetable attackable) => TargetingFunction.IsAlly(this, attackable));
+        _heal = new Heal(240, 1.0f, 0.2f, this, 60f, (Targetable attackable) => TargetingFunction.IsAllyUnit(this, attackable));
             
-        _skills = new Skill[] 
+        Skills = new Skill[] 
         {
             _attack,
             _heal
