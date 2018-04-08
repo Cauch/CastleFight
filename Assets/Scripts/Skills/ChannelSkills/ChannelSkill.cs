@@ -12,6 +12,7 @@ public abstract class ChannelSkill : ActiveSkill
 
     public ChannelSkill(float range, float refreshSpeed, float executionTime, Targetable caster, float tickSpeed, Func<Targetable, bool> isValidTarget) : base(range, refreshSpeed, executionTime, caster, isValidTarget)
     {
+        _tickCooldown = 1/tickSpeed;
     }
 
     public override ActiveSkill Update()
@@ -30,5 +31,4 @@ public abstract class ChannelSkill : ActiveSkill
     }
 
     protected abstract void Tick(Targetable target);
-
 }

@@ -9,9 +9,8 @@ public abstract class Unit : Attackable {
     const float BASE_GLOBAL_COOLDOWN = 0.2f;
     const float ANIMATOR_SPEED_MODIFIER = 0.02f;
 
-    public Attackable EnemyCastle;
-    public GameObject Corpse;
     public bool Corpseless = false;
+    public GameObject Corpse;
     public GameObject Model;
 
     public float DefaultSpeed;
@@ -52,19 +51,22 @@ public abstract class Unit : Attackable {
         base.Update();
         if (IsActive)
         {
+            // If you are doing nothing, chose a skill
             if(_currentSkill == null)
             {
                 _currentSkill = UseSkill();
             }
 
+            // If you have a skill refresh it
             if(_currentSkill != null)
             {
                 _currentSkill = _currentSkill.Update();
                 StopMoving();
             }
+            // Otherwise Move
             else
             {
-                Move(TargetingFunction.GetClosestEnemy(this));
+                Move(MoveTarget());
             }
 
             RefreshCooldown();
@@ -81,12 +83,9 @@ public abstract class Unit : Attackable {
 
     //Public methods
     //Find root cause and change
-    public void AdjustStart()
+    public virtual void AdjustStart()
     {
         this.Allegiance = this.Creator.Allegiance;
-        this.EnemyCastle = this.Allegiance ?
-            GameObject.FindGameObjectWithTag("Castle0").GetComponent<Attackable>() :
-            GameObject.FindGameObjectWithTag("Castle1").GetComponent<Attackable>();
 
         //Change color
         this.transform.GetChild(0).GetComponent<Renderer>().material.color = this.Allegiance ? Color.black : Color.white;
@@ -98,6 +97,11 @@ public abstract class Unit : Attackable {
 
     protected override void Die()
     {
+        foreach(Effect effect in _effects)
+        {
+            effect.OnDeath(this);
+        }
+
         if (_currentSkill != null)
         {
             _currentSkill.Break();
@@ -135,4 +139,8 @@ public abstract class Unit : Attackable {
     }
 
     public abstract void SetSpeed(float speed);
+    public virtual Targetable MoveTarget()
+    {
+        return TargetingFunction.GetClosestTarget(this, CastleHelper.GetCastle(!Allegiance), (Targetable Targetable) => TargetingFunction.IsEnemy(this, Targetable), DetectionRange * DetectionRange);
+    }
 }

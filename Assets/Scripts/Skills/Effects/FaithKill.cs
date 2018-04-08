@@ -8,11 +8,13 @@ public class FaithKill : Effect {
     ResourceFaith _faith;
     Builder _builder;
 
-    public FaithKill(ResourceFaith gain, Builder builder, Func<Attackable, bool> IsValidTarget) : base(0, 1, 1, IsValidTarget)
+    public FaithKill(ResourceFaith gain, Builder builder, Func<Attackable, bool> IsValidTarget) : base(0, 3, 1, IsValidTarget)
     {
+        _builder = builder;
+        _faith = gain;
     }
 
-    public override OnDeath(Targetable target)
+    public override void OnDeath(Targetable target)
     {
         IEnumerable<ResourceFaith> resourcesFaith = _builder.Resources.OfType<ResourceFaith>();
         if (resourcesFaith.Any<ResourceFaith>())

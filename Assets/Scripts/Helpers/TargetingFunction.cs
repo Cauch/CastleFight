@@ -55,13 +55,13 @@ public static class TargetingFunction {
         return null;
     }
 
-    public static Targetable GetClosestEnemy(Unit attacker)
+    public static Targetable GetClosestTarget(Unit attacker, Targetable defaultTarget, Func<Targetable, bool> validTarget, float sqrRange = 1000000.0f)
     {
-        Targetable target = attacker.EnemyCastle;
+        Targetable target = defaultTarget;
 
-        float closestDistanceSqr = attacker.DetectionRange;
+        float closestDistanceSqr = sqrRange;
 
-        foreach (Targetable potentialTarget in DetectSurroundings(attacker, (Targetable Targetable) => TargetingFunction.IsEnemy(attacker, Targetable)))
+        foreach (Targetable potentialTarget in DetectSurroundings(attacker, validTarget))
         {
             Vector3 directionToTarget = potentialTarget.transform.position - attacker.transform.position;
             float dSqrToTarget = directionToTarget.sqrMagnitude;
@@ -101,7 +101,7 @@ public static class TargetingFunction {
 
     public static bool IsUnit(Targetable Targetable)
     {
-        return Targetable is Unit;
+        return Targetable is Unit && Targetable.enabled;
     }
 
     public static bool IsInRange(Vector3 v1, Vector3 v2, float range)
@@ -129,7 +129,7 @@ public static class TargetingFunction {
 
     public static bool IsCorpse(Targetable target)
     {
-        return target is Corpse && (target as Corpse).enabled == true;
+        return target is Corpse && target.enabled;
     }
 
     public static bool IsAttackable(Targetable target)
@@ -137,4 +137,8 @@ public static class TargetingFunction {
         return target is Attackable && (target as Attackable).enabled == true;
     }
 
+    public static bool IsAllyWithCastle(Targetable caster, Targetable castle)
+    {
+        return caster.GetComponent<Shop>() && caster.Allegiance == castle.Allegiance;
+    }
 }

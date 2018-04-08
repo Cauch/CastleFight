@@ -41,4 +41,5 @@ public abstract class Effect : PassiveSkill {
     public virtual void OnTick(Targetable target) {  }
     public virtual void OnRemove(Targetable target) { }
     public virtual void OnReapply(Targetable target) { Reset(); }
+    public virtual void OnDeath(Targetable target) { }
 }

@@ -31,7 +31,7 @@ public class Attack : ActiveSkill
 
         foreach(Effect effect in Effects)
         {
-            attackable.AddEffect(effect);
+            effect.ApplyOnTarget(_target);
         }
 
         foreach(IOffensiveModifier modifier in Modifiers)
