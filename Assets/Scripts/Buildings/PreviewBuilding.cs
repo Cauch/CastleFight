@@ -8,16 +8,23 @@ public class PreviewBuilding : MonoBehaviour {
     const int RightClick= 1;
 
     public Builder Builder;
+    public GameObject BuildingTemplate;
+
     GameObject _buildingPreview;
     GameObject _world;
-    public GameObject BuildingTemplate;
     bool _isLegitPlacement;
     Collider _planeCollider;
+    PlayerConnection _playerObject;
 
 	// Use this for initialization
 	void Start () {
         _planeCollider = GameObject.FindGameObjectWithTag("Plane").GetComponent<Collider>();
-	}
+        GameObject[] gos = GameObject.FindGameObjectsWithTag("PlayerConnection");
+        if (gos.Any())
+        {
+            _playerObject = gos.Select(go => go.GetComponent<PlayerConnection>()).Where(p => p.isLocalPlayer).First();
+        }
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -88,17 +95,20 @@ public class PreviewBuilding : MonoBehaviour {
         if(_isLegitPlacement && Builder.CanPayBuilding(cost)) {
             // Pay building
             Builder.PayBuilding(cost);
-            BuildingTemplate.transform.position = _buildingPreview.transform.position;
-            Destroy(_buildingPreview);
-            GameObject newBuildingGO = Builder.InstantiateBuilding(BuildingTemplate);
-            newBuildingGO.transform.SetParent(_world.transform);
-            newBuildingGO.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+            if (_playerObject)
+            {
+                //Online
+                _playerObject.Cmd_InstantiateBuilding(PrefabIdHelper.GoIdBuilding[BuildingTemplate], Builder.Allegiance, _buildingPreview.transform.position);
+            }
+            else
+            {
+                // Offline dev
+                GameObject go = Instantiate(BuildingTemplate, _buildingPreview.transform.position, Quaternion.identity, _world.transform);
+                Attackable building = go.GetComponent<Attackable>();
 
-            Building newBuilding = newBuildingGO.GetComponent<Building>();
-
-            newBuilding.Creator = Builder;
-            newBuilding.Allegiance = Builder.Allegiance;
-            newBuilding.IsActive = true;
+                building.Allegiance = Builder.Allegiance;
+                building.IsActive = true;
+            }
             Destroy(_buildingPreview);
             Destroy(this.gameObject);
         }
@@ -120,7 +130,6 @@ public class PreviewBuilding : MonoBehaviour {
         Building preview = _buildingPreview.GetComponent<Building>();
         preview.IsActive = false;
         _buildingPreview.transform.SetParent(_world.transform);
-        _buildingPreview.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
     }
 
     Collider BuildZone()

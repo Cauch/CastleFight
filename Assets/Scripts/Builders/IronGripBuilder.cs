@@ -34,8 +34,6 @@ public class IronGripBuilder : Builder {
 
     new protected virtual void Update()
     {
-        base.Update();
-
         _time += Time.deltaTime;
 
         if (_time > IncomeCooldown / GameSettings.IncomeSpeedModifier)

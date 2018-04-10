@@ -86,7 +86,7 @@ public class UIBuildingManager : MonoBehaviour
             GameObject previousBuilding = this.Building.gameObject;
             Building buidling = Instantiate(upgrade, previousBuilding.transform.position, previousBuilding.transform.rotation, previousBuilding.transform.parent).GetComponent<Building>();
             buidling.Creator = this.Building.Creator;
-            buidling.AdjustStart();
+            buidling.Allegiance = this.Building.Allegiance;
 
             Destroy(previousBuilding);
         }

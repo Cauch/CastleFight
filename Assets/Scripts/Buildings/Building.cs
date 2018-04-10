@@ -13,11 +13,6 @@ public abstract class Building : Attackable {
         PanelType = PanelType.BUILDING;
     }
 
-    public void AdjustStart()
-    {
-        this.Allegiance = this.Creator.Allegiance;
-    }
-
     new void Update()
     {
         

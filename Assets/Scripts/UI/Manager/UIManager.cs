@@ -4,9 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour {
+    public bool IsOffline = true;
+
     public GameObject BuilderPanel;
     public GameObject BuildingPanel;
     public GameObject UnitPanel;
+    public GameObject NullPanel;
 
     public GameObject ResourcePanel;
 
@@ -23,10 +26,16 @@ public class UIManager : MonoBehaviour {
         BuildingPanel = Instantiate(BuildingPanel, _canvas.transform);
         UnitPanel = Instantiate(UnitPanel, _canvas.transform);
         ResourcePanel = Instantiate(ResourcePanel, _canvas.transform);
+        NullPanel = Instantiate(NullPanel, _canvas.transform);
 
-        _currentPanel = BuildingPanel;
+        _currentPanel = NullPanel;
+        BuilderPanel.SetActive(true);
+        ResourcePanel.SetActive(true);
         BuildingPanel.SetActive(false);
         UnitPanel.SetActive(false);
+
+        NullPanel.SetActive(true);
+
     }
 
     public void ReplacePanel(GameObject panel)
@@ -45,13 +54,21 @@ public class UIManager : MonoBehaviour {
         switch(selectable.PanelType)
         {
             case PanelType.BUILDER:
+                
                 Builder builder = selectable.GetComponent<Builder>();
                 UIBuilderManager builderManager = BuilderPanel.GetComponent<UIBuilderManager>();
                 UIResourceManager resourceManager = ResourcePanel.GetComponent<UIResourceManager>();
 
                 builderManager.Builder = builder;
                 resourceManager.Builder = builder;
-                ReplacePanel(BuilderPanel);
+                if (IsOffline)
+                {
+                    ReplacePanel(BuilderPanel);
+                }
+                else
+                {
+                    ReplacePanelDefault();
+                }
                 break;
             case PanelType.BUILDING:
                 Building building = selectable.GetComponent<Building>();
@@ -74,6 +91,6 @@ public class UIManager : MonoBehaviour {
 
     public void ReplacePanelDefault()
     {
-        ReplacePanel(DefaultSelectable);
+        ReplacePanel(NullPanel);
     }
 }

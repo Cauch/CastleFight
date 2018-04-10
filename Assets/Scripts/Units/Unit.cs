@@ -84,9 +84,7 @@ public abstract class Unit : Attackable {
     //Public methods
     //Find root cause and change
     public virtual void AdjustStart()
-    {
-        this.Allegiance = this.Creator.Allegiance;
-
+    {   
         //Change color
         this.transform.GetChild(0).GetComponent<Renderer>().material.color = this.Allegiance ? Color.black : Color.white;
 
