@@ -1,13 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class Builder : Selectable {
     //Temporary resource
     public List<GameObject> Buildings;
-    List<GameObject> _ownedBuildings;
-
     public List<IResource> Resources;
+
+    private List<GameObject> _ownedBuildings;
 
     new protected virtual void Start()
     {
@@ -16,15 +18,11 @@ public class Builder : Selectable {
         PanelType = PanelType.BUILDER;
     }
 
-    protected void Update()
-    {
-    }
-
     public GameObject InstantiateBuilding(GameObject building)
     {
-        GameObject b = Instantiate(building);
-        _ownedBuildings.Add(b);
-        return b;
+        GameObject newBuilding = Instantiate(building);
+        _ownedBuildings.Add(newBuilding);
+        return newBuilding;
     }
 
     public void DestroyBuilding(GameObject building)

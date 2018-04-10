@@ -32,8 +32,11 @@ public abstract class Effect : PassiveSkill {
 
     public override void ApplyOnTarget(Targetable target)
     {
-        AppliedTime = 0f;
-        target.AddEffect(this);
+        if (IsValidTarget(target))
+        {
+            AppliedTime = 0f;
+            target.AddEffect(this);
+        }
     }
 
     //Temporary mesure to not rewrite everything... should be redone to only take in consideration Targetable (abstract not virtual)

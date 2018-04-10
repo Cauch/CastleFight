@@ -22,16 +22,17 @@ public class UnitBuilding : Building {
 
     void ProduceUnit()
     {
-        GameObject unit = Instantiate(prefabUnit, this.transform.position, Quaternion.identity);
+        GameObject unitGO = Instantiate(prefabUnit, this.transform.position, Quaternion.identity);
         Loading = 0f;
 
-        unit.transform.SetParent(world.transform, false);
-        unit.transform.position = FindRoomForUnit();
-        unit.GetComponent<Unit>().IsActive = true;
+        unitGO.transform.SetParent(world.transform, false);
+        unitGO.transform.position = FindRoomForUnit();
+        unitGO.GetComponent<Unit>().IsActive = true;
 
-        Unit unitComp = unit.GetComponent<Unit>();
-        unitComp.Creator = Creator;
-        unitComp.AdjustStart();
+        Unit unit = unitGO.GetComponent<Unit>();
+        unit.Creator = Creator;
+        unit.Allegiance = Allegiance;
+        unit.AdjustStart();
     }
 
     Vector3 FindRoomForUnit()

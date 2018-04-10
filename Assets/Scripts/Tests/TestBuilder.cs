@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class TestBuilder : MonoBehaviour
 {
-
     public GameObject uiManager;
     public GameObject mouseManager;
     public GameObject indicator;
