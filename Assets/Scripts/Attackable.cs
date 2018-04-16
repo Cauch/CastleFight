@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public abstract class Attackable : Targetable {
     public float Hp;
@@ -9,7 +10,7 @@ public abstract class Attackable : Targetable {
     public float ArmorMods;
     public float BaseArmor;
     public Builder Creator;
-    public Builder Attacker;
+    public int CreatorId;
 
     public List<IDefensiveModifier> defensiveModifiers;
 
@@ -25,6 +26,7 @@ public abstract class Attackable : Targetable {
     {
         base.Start();
         defensiveModifiers = new List<IDefensiveModifier>();
+        CreatorId = Creator.GetInstanceID();
     }
 
     new protected void Update()

@@ -20,7 +20,7 @@ public class Parasite : GroundUnit
             atLeastOneTargetInRange = atLeastOneTargetInRange || targetInRange;
             if (targetInRange)
             {
-                if (target.DecompositionTime > _infest.ExecutionTime)
+                if (target.DecompositionTime > _infest.BaseExecutionTime)
                 {
                     _infest.ApplyOnTarget(target);
                     return _infest;

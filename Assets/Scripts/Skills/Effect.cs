@@ -34,9 +34,17 @@ public abstract class Effect : PassiveSkill {
     {
         if (IsValidTarget(target))
         {
-            AppliedTime = 0f;
-            target.AddEffect(this);
+            if (target.AlreadyAffected(this))
+            {
+                AppliedTime = 0f;
+                target.AddEffect(this);
+            }
+            else
+            {
+                OnReapply(target);
+            }
         }
+        
     }
 
     //Temporary mesure to not rewrite everything... should be redone to only take in consideration Targetable (abstract not virtual)

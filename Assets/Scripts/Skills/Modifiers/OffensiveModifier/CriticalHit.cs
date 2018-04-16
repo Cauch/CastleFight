@@ -13,7 +13,7 @@ public class CriticalHit : IOffensiveModifier
 
     public Attack ModifyAttack(Attack attack)
     {
-        float crit = Random.Range(0f, 1f);
+        float crit = ((float)RandomHelper.Random.Next(0, 100)) / 100f;
 
         if (crit < chance)
         {

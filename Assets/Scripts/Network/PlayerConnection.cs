@@ -10,6 +10,8 @@ public class PlayerConnection : NetworkBehaviour {
     public int BuilderId;
     [SyncVar]
     public bool Allegiance;
+    [SyncVar]
+    public int Seed;
 
     public GameObject UiManager;
     public GameObject MouseManager;
@@ -23,16 +25,21 @@ public class PlayerConnection : NetworkBehaviour {
         if (isLocalPlayer)
         {
             Builder player = Instantiate(PrefabIdHelper.Builders[BuilderId], _world.transform).GetComponent<Builder>();
+            player.name = Name;
             player.Allegiance = Allegiance;
+
+            NetworkHelper.IsOffline = false;
+            NetworkHelper.Builder = player;
+            NetworkHelper.Player = this;
 
             UiManager = Instantiate(UiManager);
             UiManager.GetComponent<UIManager>().DefaultSelectable = player;
-            UiManager.GetComponent<UIManager>().IsOffline = false;
+
+            MouseManager = Instantiate(MouseManager);
             MouseManager.GetComponent<MouseManager>().DefaultSelection = player.gameObject;
             MouseManager.GetComponent<MouseManager>().UiManager = UiManager.GetComponent<UIManager>();
 
-            Instantiate(MouseManager);
-
+            RandomHelper.Random = new System.Random(Seed);
             Instantiate(Indicator);
         }
     }
@@ -51,10 +58,34 @@ public class PlayerConnection : NetworkBehaviour {
 
         building.Allegiance = allegiance;
         building.IsActive = true;
-        NetworkServer.Spawn(go);
-        //Rpc_Instantiate(prefab, allegiance, position);
-    }
         
+        NetworkServer.Spawn(go);
+    }
+
+    //Find why it doesn't work
+    [Command]
+    public void Cmd_InstantiateBuildingGO(GameObject instantiated)
+    {
+        Attackable building = instantiated.GetComponent<Attackable>();
+
+        building.IsActive = true;
+
+        NetworkServer.Spawn(instantiated);
+    }
+
+    [Command]
+    public void Cmd_DestroyBuilding(NetworkInstanceId id)
+    {
+        GameObject go = NetworkServer.FindLocalObject(id);
+        NetworkServer.Destroy(go);
+    }
+
+    [Command]
+    public void Cmd_DestroyBuildingGO(GameObject go)
+    {
+        NetworkServer.Destroy(go);
+    }
+
     //Remote procedure calls
     //[ClientRpc]
     //public void Rpc_Instantiate(GameObject prefab, bool allegiance, Vector3 position)

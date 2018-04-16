@@ -8,7 +8,7 @@ using System.Linq;
 public class UIBuilderManager : MonoBehaviour {
     private Builder _builder;
     public Builder Builder {
-        get { return _builder; }
+        get { return NetworkHelper.IsOffline? _builder : NetworkHelper.Builder; }
 
         set
         {
@@ -87,6 +87,7 @@ public class UIBuilderManager : MonoBehaviour {
         {
             _buildingPreview = Instantiate(BuildingPreviewDefault);
             PreviewBuilding pb = _buildingPreview.GetComponent<PreviewBuilding>();
+            building.GetComponent<Building>().Creator = Builder;
             pb.BuildingTemplate = building;
             pb.Builder = Builder;
             pb.Instantiate();

@@ -5,6 +5,8 @@ using UnityEngine;
 
 public abstract class ActiveSkill : Skill {
     public float Cooldown;
+    public float BaseSkillRefreshSpeed;
+    public float BaseExecutionTime;
     public float SkillRefreshSpeed;
     public float ExecutionTime;
     public bool Interrupt;
@@ -16,9 +18,9 @@ public abstract class ActiveSkill : Skill {
 
     public ActiveSkill(float range, float refreshSpeed, float executionTime, Targetable caster, Func<Targetable, bool> isValidTarget) : base(range, isValidTarget)
     {
-        this.Cooldown = 0f;
-        this.SkillRefreshSpeed = refreshSpeed;
-        this.ExecutionTime = executionTime;
+        Cooldown = 0f;
+        SkillRefreshSpeed = BaseSkillRefreshSpeed = refreshSpeed;
+        BaseExecutionTime = BaseExecutionTime = executionTime;
         Caster = caster;
     }
 
@@ -41,7 +43,7 @@ public abstract class ActiveSkill : Skill {
 
     protected bool CheckForCompletion()
     {
-        if(Time.time > _beginingExecution + ExecutionTime )
+        if(Time.time > _beginingExecution + BaseExecutionTime )
         {
             Complete();
             return true;

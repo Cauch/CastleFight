@@ -53,19 +53,13 @@ public class Targetable : Selectable {
 
     public void AddEffect(Effect effect)
     {
-        if (AlreadyAffected(effect))
-        {
-
-        }
-        else
-        {
-            effect.OnApply(this);
-            _effects.Add(effect);
-        }
+        effect.OnApply(this);
+        _effects.Add(effect); 
     }
 
-    public bool AlreadyAffected(Effect effect)
+    public bool AlreadyAffected(Effect effect, int stacks = 1)
     {
-        return _effects.Where(t => t.GetType() == effect.GetType()).Any();
+        return _effects.Where(t => t.GetType() == effect.GetType()).Count() >= stacks;
     }
+
 }

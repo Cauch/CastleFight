@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
 public class UIBuildingManager : MonoBehaviour
@@ -32,6 +33,8 @@ public class UIBuildingManager : MonoBehaviour
     public GameObject TextTemplate;
     private Transform _progressBar;
 
+    private Image _image;
+
     private Transform _upgradesSubPanel;
     private Dictionary<IBuildingCost, Button> _buttons = new Dictionary<IBuildingCost, Button>();
     private UIManager _uiManager;
@@ -41,6 +44,7 @@ public class UIBuildingManager : MonoBehaviour
     {
         _upgradesSubPanel = this.transform.GetChild(1);
         _progressBar = this.transform.GetChild(2);
+        _image = _progressBar.GetComponent<Image>();
     }
 
     // Use this for initialization
@@ -81,18 +85,36 @@ public class UIBuildingManager : MonoBehaviour
 
     void ClickUpgrade(GameObject upgrade)
     {
-        if (Building.Creator.CanPayBuilding(upgrade.GetComponent<IBuildingCost>()))
+        if (NetworkHelper.IsOffline)
         {
-            GameObject previousBuilding = this.Building.gameObject;
-            Building buidling = Instantiate(upgrade, previousBuilding.transform.position, previousBuilding.transform.rotation, previousBuilding.transform.parent).GetComponent<Building>();
-            buidling.Creator = this.Building.Creator;
-            buidling.Allegiance = this.Building.Allegiance;
+            if (Building.Creator.CanPayBuilding(upgrade.GetComponent<IBuildingCost>()))
+            {
+                NetworkHelper.Builder.PayBuilding(upgrade.GetComponent<IBuildingCost>());
+                GameObject previousBuilding = this.Building.gameObject;
+                Building buidling = Instantiate(upgrade, previousBuilding.transform.position, previousBuilding.transform.rotation, previousBuilding.transform.parent).GetComponent<Building>();
+                buidling.Creator = this.Building.Creator;
+                buidling.Allegiance = this.Building.Allegiance;
 
-            Destroy(previousBuilding);
+                Destroy(previousBuilding);
+            }
+            else
+            {
+                //Proc not enough money message
+            }
         }
         else
         {
-            //Proc not enough money error
+            if (NetworkHelper.Builder.CanPayBuilding(upgrade.GetComponent<IBuildingCost>()))
+            {
+                NetworkHelper.Builder.PayBuilding(upgrade.GetComponent<IBuildingCost>());
+                GameObject previousBuilding = this.Building.gameObject;
+                NetworkHelper.InstantiateBuilding(upgrade, previousBuilding.transform.position);
+                NetworkHelper.DestroyBuilding(previousBuilding);
+            }
+            else
+            {
+                //Proc not enough money message
+            }
         }
     }
 
@@ -108,9 +130,22 @@ public class UIBuildingManager : MonoBehaviour
         {
             _uiManager.ReplacePanelDefault();
         }
+
+        foreach (KeyValuePair<IBuildingCost, Button> buildingButton in _buttons)
+        {
+            Builder builder = NetworkHelper.IsOffline ? Building.Creator : NetworkHelper.Builder;
+            if (builder.CanPayBuilding(buildingButton.Key))
+            {
+                buildingButton.Value.interactable = true;
+            }
+            else
+            {
+                buildingButton.Value.interactable = false;
+            }
+        }
+
         HpText.text = "HP: " + Building.Hp.ToString() + "/" + Building.MaxHp.ToString();
         ArmorText.text = "Armor: " + Building.Armor.ToString();
-        Image image = _progressBar.GetComponent<Image>();
-        image.fillAmount = Building.Loading / Building.MaxTime;
+        _image.fillAmount = Building.Loading / Building.MaxTime;
     }
 }

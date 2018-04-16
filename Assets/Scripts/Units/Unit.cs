@@ -77,7 +77,7 @@ public abstract class Unit : Attackable {
     {
         foreach (ActiveSkill skill in Skills)
         {
-            skill.Cooldown -= (Time.deltaTime * skill.SkillRefreshSpeed);
+            skill.Cooldown -= (Time.deltaTime * skill.BaseSkillRefreshSpeed);
         }
     }
 
