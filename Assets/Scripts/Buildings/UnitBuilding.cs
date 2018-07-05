@@ -30,7 +30,7 @@ public class UnitBuilding : Building {
         unitGO.GetComponent<Unit>().IsActive = true;
 
         Unit unit = unitGO.GetComponent<Unit>();
-        unit.Creator = Creator;
+        unit.CreatorId = CreatorId;
         unit.Allegiance = Allegiance;
         unit.AdjustStart();
     }

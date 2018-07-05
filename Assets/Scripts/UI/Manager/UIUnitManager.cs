@@ -26,8 +26,8 @@ public class UIUnitManager : MonoBehaviour
         {
             _uiManager.ReplacePanelDefault();
         }
-        HpText.text = "HP: " + Unit.Hp.ToString() + "/" + Unit.MaxHp.ToString();
-        ArmorText.text = "Armor: " + Unit.Armor.ToString();
+        HpText.text = "HP: " + Unit.Hp.ToString("F0") + "/" + Unit.MaxHp.ToString();
+        ArmorText.text = "Armor: " + Unit.Armor.ToString("F0");
         DescriptionText.text = Unit.ToString();
     }
 }

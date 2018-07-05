@@ -13,6 +13,9 @@ public class PlayerConnection : NetworkBehaviour {
     [SyncVar]
     public int Seed;
 
+    //[SyncVar]
+    //public Dictionary<string, uint> resources;
+    
     public GameObject UiManager;
     public GameObject MouseManager;
     public GameObject Indicator;
@@ -43,20 +46,16 @@ public class PlayerConnection : NetworkBehaviour {
             Instantiate(Indicator);
         }
     }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 
     //Commands 
     [Command]
-    public void Cmd_InstantiateBuilding(NetworkHash128 prefabId, bool allegiance, Vector3 position)
+    public void Cmd_InstantiateBuilding(NetworkHash128 prefabId, int builderId, Vector3 position)
     {
         GameObject go = Instantiate(PrefabIdHelper.IdGoBuilding[prefabId], position, Quaternion.identity, _world.transform);
-        Attackable building = go.GetComponent<Attackable>(); 
+        Attackable building = go.GetComponent<Attackable>();
 
-        building.Allegiance = allegiance;
+        building.CreatorId = BuilderId;
+        building.Allegiance = BuilderHelper.GetBuilderById(BuilderId).Allegiance;
         building.IsActive = true;
         
         NetworkServer.Spawn(go);
@@ -85,6 +84,14 @@ public class PlayerConnection : NetworkBehaviour {
     {
         NetworkServer.Destroy(go);
     }
+
+    [Command]
+    public void Cmd_UpdateResource(string name, uint newValue)
+    {
+        //resources[name] = newValue;
+    }
+
+
 
     //Remote procedure calls
     //[ClientRpc]

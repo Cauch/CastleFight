@@ -10,7 +10,7 @@ public class Rummager : GroundUnit
 
     public override ActiveSkill UseSkill()
     {
-        if (Creator is HalfOnesBuilder)
+        if (BuilderHelper.GetBuilderById(this.CreatorId) is HalfOnesBuilder)
         {
             if (TargetingFunction.IsInRangeorMelee(this, CastleHelper.GetCastle(Allegiance), _range))
             {

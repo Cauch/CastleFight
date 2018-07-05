@@ -16,10 +16,13 @@ public class FaithKill : Effect {
 
     public override void OnDeath(Targetable target)
     {
-        IEnumerable<ResourceFaith> resourcesFaith = _builder.Resources.OfType<ResourceFaith>();
-        if (resourcesFaith.Any<ResourceFaith>())
+        if (_builder)
         {
-            resourcesFaith.First().Add(_faith);
+            IEnumerable<ResourceFaith> resourcesFaith = _builder.Resources.OfType<ResourceFaith>();
+            if (resourcesFaith.Any<ResourceFaith>())
+            {
+                resourcesFaith.First().Add(_faith);
+            }
         }
     }
 }

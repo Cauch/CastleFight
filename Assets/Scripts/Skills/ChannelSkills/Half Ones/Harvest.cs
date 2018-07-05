@@ -12,13 +12,18 @@ public class Harvest : ChannelSkill
     public uint _currentBiomass;
     private float _decompositionPerBiomass;
 
+    public int BuilderId
+    {
+        get { return _builder.Id; }
+        set { this._builder.Id = value; }
+    }
     private Builder _builder;
 
     public Harvest(uint maxBiomass, float decompositionRate, Attackable caster, float tickSpeed, Func<Targetable, bool> isValidTarget) : base(0, 10, 100, caster, tickSpeed, isValidTarget)
     {
         _maxBiomass = maxBiomass;
-        _builder = caster.Creator;
         _decompositionPerBiomass = decompositionRate;
+        BuilderId = caster.CreatorId;
     }
 
     protected override void Tick(Targetable target)

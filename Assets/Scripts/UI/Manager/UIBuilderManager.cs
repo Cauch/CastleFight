@@ -47,7 +47,7 @@ public class UIBuilderManager : MonoBehaviour {
 
             _buttons[buildCost] = button;
 
-            IEnumerable<IResource> cost = buildCost.GetResources();
+            IEnumerable<Resource> cost = buildCost.GetResources();
             string costText = string.Join(Environment.NewLine, cost.Select((r) => r.ToString()).ToArray());
 
             button.GetComponentInChildren<Text>().text = building.name + Environment.NewLine + costText;
@@ -87,7 +87,7 @@ public class UIBuilderManager : MonoBehaviour {
         {
             _buildingPreview = Instantiate(BuildingPreviewDefault);
             PreviewBuilding pb = _buildingPreview.GetComponent<PreviewBuilding>();
-            building.GetComponent<Building>().Creator = Builder;
+            building.GetComponent<Building>().CreatorId = Builder.Id;
             pb.BuildingTemplate = building;
             pb.Builder = Builder;
             pb.Instantiate();

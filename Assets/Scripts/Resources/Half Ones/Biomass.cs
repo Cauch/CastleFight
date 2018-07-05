@@ -3,12 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ResourceBiomass : IResource {
+public class ResourceBiomass : Resource {
     public ResourceBiomass(uint value) : base(value, "Biomass")
     {
     }
 
-    public override void Purchase(IResource cost)
+    public override void Purchase(Resource cost)
     {
         if (cost is ResourceBiomass)
         {

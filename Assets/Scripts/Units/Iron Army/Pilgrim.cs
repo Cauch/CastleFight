@@ -18,7 +18,7 @@ public class Pilgrim : GroundUnit
 
         attack = new Attack(0, 1.0f, this, 10, (Targetable attackable) => TargetingFunction.IsEnemy(this, attackable))
         {
-            Effects = new List<Effect> { new FaithKill(new ResourceFaith(1), this.Creator, TargetingFunction.IsUnit) }
+            Effects = new List<Effect> { new FaithKill(new ResourceFaith(1), BuilderHelper.GetBuilderById(this.CreatorId), TargetingFunction.IsUnit) }
         };
         Skills = new[] { attack };
     }

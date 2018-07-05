@@ -7,13 +7,15 @@ using UnityEngine.Networking;
 public class Builder : Selectable {
     //Temporary resource
     public List<GameObject> Buildings;
-    public List<IResource> Resources;
+    public List<Resource> Resources;
+    public int Id;
 
     private List<GameObject> _ownedBuildings;
 
     new protected virtual void Start()
     {
         base.Start();
+        Id = BuilderHelper.AddBuilder(this);
         this._ownedBuildings = new List<GameObject>();
         PanelType = PanelType.BUILDER;
     }

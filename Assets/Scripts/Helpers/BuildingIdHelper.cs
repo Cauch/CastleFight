@@ -5,9 +5,11 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 public static class PrefabIdHelper {
+    public static int AvailableId = 0;
+
     public static Dictionary<NetworkHash128, GameObject> IdGoBuilding = PopulateBuildingDictionaryIdGo();
     public static Dictionary<GameObject, NetworkHash128> GoIdBuilding = Reverse(PopulateBuildingDictionaryIdGo());
-
+    
     public static List<GameObject> Builders = LoadAllBuilder();
 
     public static Dictionary<NetworkHash128, GameObject> PopulateBuildingDictionaryIdGo()

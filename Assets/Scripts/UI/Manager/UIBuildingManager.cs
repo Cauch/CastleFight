@@ -66,7 +66,7 @@ public class UIBuildingManager : MonoBehaviour
 
             _buttons[buildCost] = button;
 
-            IEnumerable<IResource> cost = buildCost.GetResources();
+            IEnumerable<Resource> cost = buildCost.GetResources();
             string costText = string.Join(Environment.NewLine, cost.Select((r) => r.ToString()).ToArray());
 
             button.GetComponentInChildren<Text>().text = upgrade.name + Environment.NewLine + costText;
@@ -85,36 +85,31 @@ public class UIBuildingManager : MonoBehaviour
 
     void ClickUpgrade(GameObject upgrade)
     {
-        if (NetworkHelper.IsOffline)
+        Builder Creator = NetworkHelper.IsOffline ? BuilderHelper.GetBuilderById(Building.CreatorId) : NetworkHelper.Builder;
+        if (!Creator.CanPayBuilding(upgrade.GetComponent<IBuildingCost>()))
         {
-            if (Building.Creator.CanPayBuilding(upgrade.GetComponent<IBuildingCost>()))
-            {
-                NetworkHelper.Builder.PayBuilding(upgrade.GetComponent<IBuildingCost>());
-                GameObject previousBuilding = this.Building.gameObject;
-                Building buidling = Instantiate(upgrade, previousBuilding.transform.position, previousBuilding.transform.rotation, previousBuilding.transform.parent).GetComponent<Building>();
-                buidling.Creator = this.Building.Creator;
-                buidling.Allegiance = this.Building.Allegiance;
-
-                Destroy(previousBuilding);
-            }
-            else
-            {
-                //Proc not enough money message
-            }
+            // Proc not enough money message
         }
         else
         {
-            if (NetworkHelper.Builder.CanPayBuilding(upgrade.GetComponent<IBuildingCost>()))
-            {
-                NetworkHelper.Builder.PayBuilding(upgrade.GetComponent<IBuildingCost>());
-                GameObject previousBuilding = this.Building.gameObject;
-                NetworkHelper.InstantiateBuilding(upgrade, previousBuilding.transform.position);
-                NetworkHelper.DestroyBuilding(previousBuilding);
-            }
-            else
-            {
-                //Proc not enough money message
-            }
+            NetworkHelper.Builder.PayBuilding(upgrade.GetComponent<IBuildingCost>());
+            GameObject previousBuilding = this.Building.gameObject;
+            InstantiateBuilding(upgrade, Creator, previousBuilding);
+            Destroy(previousBuilding);
+        }
+    }
+
+    void InstantiateBuilding(GameObject building, Builder creator, GameObject previousBuilding)
+    {
+        if(NetworkHelper.IsOffline)
+        {
+            Building buidling = Instantiate(building, previousBuilding.transform.position, previousBuilding.transform.rotation, previousBuilding.transform.parent).GetComponent<Building>();
+            buidling.CreatorId = creator.Id;
+            buidling.Allegiance = creator.Allegiance;
+        }
+        else
+        {
+            NetworkHelper.InstantiateBuilding(building, previousBuilding.transform.position);
         }
     }
 
@@ -133,7 +128,7 @@ public class UIBuildingManager : MonoBehaviour
 
         foreach (KeyValuePair<IBuildingCost, Button> buildingButton in _buttons)
         {
-            Builder builder = NetworkHelper.IsOffline ? Building.Creator : NetworkHelper.Builder;
+            Builder builder = NetworkHelper.IsOffline ? BuilderHelper.GetBuilderById(Building.CreatorId) : NetworkHelper.Builder;
             if (builder.CanPayBuilding(buildingButton.Key))
             {
                 buildingButton.Value.interactable = true;

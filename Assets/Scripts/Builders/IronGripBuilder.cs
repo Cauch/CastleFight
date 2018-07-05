@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class IronGripBuilder : Builder {
-    public IResource Iron;
-    public IResource Faith;
+    public Resource Iron;
+    public Resource Faith;
 
     public uint StartingIron = 100u;
     public uint BaseIronIncome = 10u;
     public uint StartingFaith = 0u;
 
-    private IResource _baseIncomeIron;
+    private Resource _baseIncomeIron;
 
     public float IncomeCooldown = 10;
     private float _time;
@@ -25,14 +25,14 @@ public class IronGripBuilder : Builder {
         Iron = new ResourceIron(StartingIron);
         _baseIncomeIron = new ResourceIron(BaseIronIncome);
 
-        Resources = new List<IResource>
+        Resources = new List<Resource>
         {
             Iron,
             Faith,
         };
     }
 
-    new protected virtual void Update()
+    protected virtual void Update()
     {
         _time += Time.deltaTime;
 

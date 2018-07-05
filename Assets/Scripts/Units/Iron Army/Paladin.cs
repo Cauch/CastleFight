@@ -19,7 +19,7 @@ public class Paladin : GroundUnit
 
         //Offensive bonuses
         
-        _faithBonus = new FaithBonus(Creator, 100f, 0.5f);
+        _faithBonus = new FaithBonus(BuilderHelper.GetBuilderById(CreatorId), 100f, 0.5f);
 
         List<IOffensiveModifier> modifiers = new List<IOffensiveModifier>
         {

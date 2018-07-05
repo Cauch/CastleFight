@@ -9,7 +9,6 @@ public abstract class Attackable : Targetable {
     public float MaxHp;
     public float ArmorMods;
     public float BaseArmor;
-    public Builder Creator;
     public int CreatorId;
 
     public List<IDefensiveModifier> defensiveModifiers;
@@ -26,7 +25,6 @@ public abstract class Attackable : Targetable {
     {
         base.Start();
         defensiveModifiers = new List<IDefensiveModifier>();
-        CreatorId = Creator.GetInstanceID();
     }
 
     new protected void Update()

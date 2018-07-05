@@ -19,7 +19,7 @@ public class FaithBonus : IOffensiveModifier
     public Attack ModifyAttack(Attack attack)
     {
         IronGripBuilder creator = _creator as IronGripBuilder;
-        if(creator != null)
+        if(creator)
         {
             attack.Damage += Mathf.Min((float)creator.Faith.Value * _attackPerFaith, _max);
         }

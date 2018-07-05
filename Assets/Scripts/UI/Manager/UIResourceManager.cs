@@ -22,13 +22,13 @@ public class UIResourceManager : MonoBehaviour {
 
     public GameObject TextTemplate;
 
-    private Dictionary<IResource, Text> _texts = new Dictionary<IResource,Text>();
+    private Dictionary<Resource, Text> _texts = new Dictionary<Resource,Text>();
 
     private void Update()
     {
         if (Builder == null) return;
 
-        foreach (IResource resource in Builder.Resources)
+        foreach (Resource resource in Builder.Resources)
         {
             _texts[resource].text = resource.ToString();
         }
@@ -36,7 +36,7 @@ public class UIResourceManager : MonoBehaviour {
 
     private void InstantiateTexts()
     {
-        foreach (IResource resource in Builder.Resources)
+        foreach (Resource resource in Builder.Resources)
         {
             GameObject text = Instantiate(TextTemplate, this.transform);
             _texts.Add(resource, text.GetComponent<Text>());
@@ -45,7 +45,7 @@ public class UIResourceManager : MonoBehaviour {
 
     private void DestroyTexts()
     {
-        foreach (KeyValuePair<IResource, Text> kv in _texts)
+        foreach (KeyValuePair<Resource, Text> kv in _texts)
         {
             Destroy(kv.Value.gameObject);
         }
