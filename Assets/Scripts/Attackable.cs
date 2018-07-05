@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public abstract class Attackable : Targetable {
     public float Hp;
     public float MaxHp;
     public float ArmorMods;
     public float BaseArmor;
-    public Builder Creator;
-    public Builder Attacker;
+    public int CreatorId;
 
     public List<IDefensiveModifier> defensiveModifiers;
 

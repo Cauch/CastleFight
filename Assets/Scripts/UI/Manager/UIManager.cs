@@ -4,8 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour {
-    public bool IsOffline = true;
-
     public GameObject BuilderPanel;
     public GameObject BuildingPanel;
     public GameObject UnitPanel;
@@ -61,7 +59,7 @@ public class UIManager : MonoBehaviour {
 
                 builderManager.Builder = builder;
                 resourceManager.Builder = builder;
-                if (IsOffline)
+                if (NetworkHelper.IsOffline)
                 {
                     ReplacePanel(BuilderPanel);
                 }

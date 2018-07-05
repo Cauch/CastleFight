@@ -77,14 +77,15 @@ public abstract class Unit : Attackable {
     {
         foreach (ActiveSkill skill in Skills)
         {
-            skill.Cooldown -= (Time.deltaTime * skill.SkillRefreshSpeed);
+            skill.Cooldown -= (Time.deltaTime * skill.BaseSkillRefreshSpeed);
         }
     }
 
     //Public methods
     //Find root cause and change
     public virtual void AdjustStart()
-    {   
+    {
+        IsActive = true;
         //Change color
         this.transform.GetChild(0).GetComponent<Renderer>().material.color = this.Allegiance ? Color.black : Color.white;
 

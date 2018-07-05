@@ -21,8 +21,7 @@ public class Aura : Effect
         {
             if (IsValidTarget(target))
             {
-                effect.Reset();
-                target.AddEffect(effect);
+                effect.ApplyOnTarget(target);
             }
         }
 

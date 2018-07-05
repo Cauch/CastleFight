@@ -4,9 +4,8 @@ using UnityEngine;
 using System.Linq;
 
 public abstract class IncomeBuilding : Building {
-    protected IResource _resource;
+    protected Resource _resource;
     protected float _cooldown;
-    private float _time;
 
     protected abstract void InitResource();
 
@@ -18,7 +17,8 @@ public abstract class IncomeBuilding : Building {
 
     public override void ActivateMaxLoading()
     {
-        Creator.Resources.Where((r) => r.GetType() == _resource.GetType()).First().Add(_resource);
+        
+        BuilderHelper.GetBuilderById(this.CreatorId).Resources.Where((r) => r.GetType() == _resource.GetType()).First().Add(_resource);
     }
     
     

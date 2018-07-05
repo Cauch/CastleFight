@@ -16,7 +16,7 @@ public class Attack : ActiveSkill
         Effects = effects ?? new List<Effect>();
     }
 
-    public Attack(Attack attack) : base(attack.Range, attack.SkillRefreshSpeed, attack.SkillRefreshSpeed, attack.Caster, attack.IsValidTarget)
+    public Attack(Attack attack) : base(attack.Range, attack.BaseSkillRefreshSpeed, attack.BaseSkillRefreshSpeed, attack.Caster, attack.IsValidTarget)
     {
         Damage = attack.Damage;
         Modifiers = attack.Modifiers; //Sketchy for a copy constructor. Not a true copy of the list

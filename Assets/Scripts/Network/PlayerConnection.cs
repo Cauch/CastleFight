@@ -10,7 +10,12 @@ public class PlayerConnection : NetworkBehaviour {
     public int BuilderId;
     [SyncVar]
     public bool Allegiance;
+    [SyncVar]
+    public int Seed;
 
+    //[SyncVar]
+    //public Dictionary<string, uint> resources;
+    
     public GameObject UiManager;
     public GameObject MouseManager;
     public GameObject Indicator;
@@ -23,38 +28,71 @@ public class PlayerConnection : NetworkBehaviour {
         if (isLocalPlayer)
         {
             Builder player = Instantiate(PrefabIdHelper.Builders[BuilderId], _world.transform).GetComponent<Builder>();
+            player.name = Name;
             player.Allegiance = Allegiance;
+
+            NetworkHelper.IsOffline = false;
+            NetworkHelper.Builder = player;
+            NetworkHelper.Player = this;
 
             UiManager = Instantiate(UiManager);
             UiManager.GetComponent<UIManager>().DefaultSelectable = player;
-            UiManager.GetComponent<UIManager>().IsOffline = false;
+
+            MouseManager = Instantiate(MouseManager);
             MouseManager.GetComponent<MouseManager>().DefaultSelection = player.gameObject;
             MouseManager.GetComponent<MouseManager>().UiManager = UiManager.GetComponent<UIManager>();
 
-            Instantiate(MouseManager);
-
+            RandomHelper.Random = new System.Random(Seed);
             Instantiate(Indicator);
         }
     }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 
     //Commands 
     [Command]
-    public void Cmd_InstantiateBuilding(NetworkHash128 prefabId, bool allegiance, Vector3 position)
+    public void Cmd_InstantiateBuilding(NetworkHash128 prefabId, int builderId, Vector3 position)
     {
         GameObject go = Instantiate(PrefabIdHelper.IdGoBuilding[prefabId], position, Quaternion.identity, _world.transform);
-        Attackable building = go.GetComponent<Attackable>(); 
+        Attackable building = go.GetComponent<Attackable>();
 
-        building.Allegiance = allegiance;
+        building.CreatorId = BuilderId;
+        building.Allegiance = BuilderHelper.GetBuilderById(BuilderId).Allegiance;
         building.IsActive = true;
-        NetworkServer.Spawn(go);
-        //Rpc_Instantiate(prefab, allegiance, position);
-    }
         
+        NetworkServer.Spawn(go);
+    }
+
+    //Find why it doesn't work
+    [Command]
+    public void Cmd_InstantiateBuildingGO(GameObject instantiated)
+    {
+        Attackable building = instantiated.GetComponent<Attackable>();
+
+        building.IsActive = true;
+
+        NetworkServer.Spawn(instantiated);
+    }
+
+    [Command]
+    public void Cmd_DestroyBuilding(NetworkInstanceId id)
+    {
+        GameObject go = NetworkServer.FindLocalObject(id);
+        NetworkServer.Destroy(go);
+    }
+
+    [Command]
+    public void Cmd_DestroyBuildingGO(GameObject go)
+    {
+        NetworkServer.Destroy(go);
+    }
+
+    [Command]
+    public void Cmd_UpdateResource(string name, uint newValue)
+    {
+        //resources[name] = newValue;
+    }
+
+
+
     //Remote procedure calls
     //[ClientRpc]
     //public void Rpc_Instantiate(GameObject prefab, bool allegiance, Vector3 position)

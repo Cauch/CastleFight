@@ -98,7 +98,7 @@ public class PreviewBuilding : MonoBehaviour {
             if (_playerObject)
             {
                 //Online
-                _playerObject.Cmd_InstantiateBuilding(PrefabIdHelper.GoIdBuilding[BuildingTemplate], Builder.Allegiance, _buildingPreview.transform.position);
+                _playerObject.Cmd_InstantiateBuilding(PrefabIdHelper.GoIdBuilding[BuildingTemplate], Builder.Id, _buildingPreview.transform.position);
             }
             else
             {

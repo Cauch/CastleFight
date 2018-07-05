@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class HalfOnesBuilder : Builder {
-    public IResource BioMass;
+    public Resource BioMass;
 
     public uint StartingBiomass = 100u;
     public uint BaseBiomassIncome = 10u;
 
-    private IResource _baseIncomeBiomass;
+    private Resource _baseIncomeBiomass;
 
     public float IncomeCooldown = 10;
     private float _time;
@@ -22,13 +22,13 @@ public class HalfOnesBuilder : Builder {
         BioMass = new ResourceBiomass(StartingBiomass);
         _baseIncomeBiomass = new ResourceIron(BaseBiomassIncome);
 
-        Resources = new List<IResource>
+        Resources = new List<Resource>
         {
             BioMass
         };
     }
 
-    new protected virtual void Update()
+    protected virtual void Update()
     {
         _time += Time.deltaTime;
 

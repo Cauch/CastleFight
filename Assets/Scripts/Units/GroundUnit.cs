@@ -13,6 +13,8 @@ public abstract class GroundUnit : Unit
         base.Start();
         _navMesh = GetComponent<NavMeshAgent>();
         _navMesh.speed = this.DefaultSpeed;
+        _navMesh.enabled = false;
+        _navMesh.enabled = true;
     }
 	
 	// Update is called once per frame

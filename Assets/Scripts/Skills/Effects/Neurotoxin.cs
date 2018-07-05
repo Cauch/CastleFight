@@ -23,7 +23,7 @@ public class Neurotoxin : Effect
 
         foreach(ActiveSkill s in unit.Skills)
         {
-            s.SkillRefreshSpeed *= (1 - _skillSpeedReduction);
+            s.BaseSkillRefreshSpeed *= (1 - _skillSpeedReduction);
         }
 
         unit.SetSpeed(unit.DefaultSpeed * (1 - _movementSpeedReduction));
@@ -35,7 +35,7 @@ public class Neurotoxin : Effect
 
         foreach (ActiveSkill s in unit.Skills)
         {
-            s.SkillRefreshSpeed /= (1 - _skillSpeedReduction);
+            s.BaseSkillRefreshSpeed /= (1 - _skillSpeedReduction);
         }
 
         unit.SetSpeed(unit.DefaultSpeed);

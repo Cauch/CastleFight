@@ -15,11 +15,12 @@ public class Infest : ActiveSkill
     protected override void Complete()
     {
         Unit caster = Caster as Unit;
-        Unit unit = (_target as Corpse).Unit;
-        unit.Creator = caster.Creator;
-        unit.MaxHp *= _maxHpPercentage;
-        unit.Hp = unit.MaxHp;
-        unit.Corpseless = true;
+        Unit target = (_target as Corpse).Unit;
+        target.CreatorId = caster.CreatorId;
+        target.Allegiance = caster.Allegiance;
+        target.MaxHp *= _maxHpPercentage;
+        target.Hp = target.MaxHp;
+        target.Corpseless = true;
         (_target as Corpse).Resurrect();
         caster.Hp = 0;
     }

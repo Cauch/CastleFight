@@ -300,11 +300,6 @@
     <Compile Include="Assets\RTS_Camera\Demo\DemoScene.cs" />
     <Compile Include="Assets\RTS_Camera\Demo\TargetSelector.cs" />
     <Compile Include="Assets\RTS_Camera\Scripts\RTS_Camera.cs" />
-    <Compile Include="Assets\SampleScenes\Scripts\NetworkAsteroid.cs" />
-    <Compile Include="Assets\SampleScenes\Scripts\NetworkGameManager.cs" />
-    <Compile Include="Assets\SampleScenes\Scripts\NetworkLobbyHook.cs" />
-    <Compile Include="Assets\SampleScenes\Scripts\NetworkSpaceship.cs" />
-    <Compile Include="Assets\SampleScenes\Scripts\NetworkSpaceshipBullet.cs" />
     <Compile Include="Assets\Scripts\Attackable.cs" />
     <Compile Include="Assets\Scripts\Builders\Builder.cs" />
     <Compile Include="Assets\Scripts\Builders\HalfOnesBuilder.cs" />
@@ -324,8 +319,11 @@
     <Compile Include="Assets\Scripts\Helpers\BuildingIdHelper.cs" />
     <Compile Include="Assets\Scripts\Helpers\CastleHelper.cs" />
     <Compile Include="Assets\Scripts\Helpers\GameSettings.cs" />
+    <Compile Include="Assets\Scripts\Helpers\NetworkHelper.cs" />
     <Compile Include="Assets\Scripts\Helpers\PanelType.cs" />
+    <Compile Include="Assets\Scripts\Helpers\RandomHelper.cs" />
     <Compile Include="Assets\Scripts\Helpers\TargetingFunction.cs" />
+    <Compile Include="Assets\Scripts\Network\NetworkLobbyHook.cs" />
     <Compile Include="Assets\Scripts\Network\PlayerConnection.cs" />
     <Compile Include="Assets\Scripts\Resources\Half Ones\Biomass.cs" />
     <Compile Include="Assets\Scripts\Resources\IResource.cs" />
@@ -347,6 +345,8 @@
     <Compile Include="Assets\Scripts\Skills\Effects\Neurotoxin.cs" />
     <Compile Include="Assets\Scripts\Skills\Effects\OvertimeHeal.cs" />
     <Compile Include="Assets\Scripts\Skills\Effects\Poison.cs" />
+    <Compile Include="Assets\Scripts\Skills\Effects\Surronding.cs" />
+    <Compile Include="Assets\Scripts\Skills\Effects\Zeal.cs" />
     <Compile Include="Assets\Scripts\Skills\Modifiers\DefensiveModifier\Block.cs" />
     <Compile Include="Assets\Scripts\Skills\Modifiers\DefensiveModifier\IDefensiveModifier.cs" />
     <Compile Include="Assets\Scripts\Skills\Modifiers\IModifier.cs" />
@@ -366,7 +366,6 @@
     <Compile Include="Assets\Scripts\UI\Manager\UIManager.cs" />
     <Compile Include="Assets\Scripts\UI\Manager\UIResourceManager.cs" />
     <Compile Include="Assets\Scripts\UI\Manager\UIUnitManager.cs" />
-    <Compile Include="Assets\Scripts\UI\UIProgressionBar.cs" />
     <Compile Include="Assets\Scripts\Units\Corpse.cs" />
     <Compile Include="Assets\Scripts\Units\FlyingUnit.cs" />
     <Compile Include="Assets\Scripts\Units\GroundUnit.cs" />
@@ -374,6 +373,7 @@
     <Compile Include="Assets\Scripts\Units\Half Ones\Rummager.cs" />
     <Compile Include="Assets\Scripts\Units\Iron Army\Footman.cs" />
     <Compile Include="Assets\Scripts\Units\Iron Army\High_Priestess.cs" />
+    <Compile Include="Assets\Scripts\Units\Iron Army\Inquisitor.cs" />
     <Compile Include="Assets\Scripts\Units\Iron Army\Light_Knight.cs" />
     <Compile Include="Assets\Scripts\Units\Iron Army\Paladin.cs" />
     <Compile Include="Assets\Scripts\Units\Iron Army\Pilgrim.cs" />
