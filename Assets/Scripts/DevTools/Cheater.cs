@@ -21,6 +21,11 @@ public class Cheater : MonoBehaviour {
         {
            Debug.Log(GetNumberOf(TargetingFunction.IsUnit));
         }
+
+        if(Input.GetKeyDown(KeyCode.T))
+        {
+            GameSettings.FloatingTextOn = true;
+        }
     }
 
     void KillAll(Func<Attackable, bool> MustKill)

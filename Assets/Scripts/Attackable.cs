@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 public abstract class Attackable : Targetable {
+    public Vector3 FloatingTextOffSet = new Vector3(0, 10f, 0);
+
     public float Hp;
     public float MaxHp;
     public float ArmorMods;
@@ -18,7 +20,16 @@ public abstract class Attackable : Targetable {
         private set { throw new System.Exception(); }
     }
 
-    public void AddHp(float hp){ this.Hp = Mathf.Min(this.Hp + hp, MaxHp); }
+    public void AddHp(float hp)
+    {
+        if (GameSettings.FloatingTextOn)
+        {
+            HpTextHook(hp);
+        }
+
+        this.Hp = Mathf.Min(this.Hp + hp, MaxHp);
+    }
+
     public void ModAllegiance(bool allegiance) { this.Allegiance = allegiance; }
 
     new protected virtual void Start()
@@ -46,5 +57,13 @@ public abstract class Attackable : Targetable {
     protected virtual void Die()
     {
         Destroy(this.gameObject, 0.01f);
+    }
+
+    private void HpTextHook(float hpDiff)
+    {
+        GameObject go = ObjectPooler.Instance.SpawnFromPool(PooledEnum.FLOATING_TEXT, this.gameObject.transform.position + FloatingTextOffSet, Quaternion.identity);
+        FloatingText text = go.GetComponent<FloatingText>();
+      
+        text.SetText(hpDiff.ToString("F0"), hpDiff < 0 ? Color.red : Color.green);
     }
 }

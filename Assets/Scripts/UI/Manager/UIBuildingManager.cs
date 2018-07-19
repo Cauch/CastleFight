@@ -92,7 +92,7 @@ public class UIBuildingManager : MonoBehaviour
         }
         else
         {
-            NetworkHelper.Builder.PayBuilding(upgrade.GetComponent<IBuildingCost>());
+            Creator.PayBuilding(upgrade.GetComponent<IBuildingCost>());
             GameObject previousBuilding = this.Building.gameObject;
             InstantiateBuilding(upgrade, Creator, previousBuilding);
             Destroy(previousBuilding);

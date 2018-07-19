@@ -20,7 +20,7 @@ public class Weight_Thrower : GroundUnit
         ArmorPierce armorPiercing = new ArmorPierce(0.6f);
         _modifiers.Add(armorPiercing);
 
-        _attack = new Attack(100, 1f / 0.3f, this, 60, (Targetable attackable) => TargetingFunction.IsEnemy(this, attackable))
+        _attack = new RangeAttack(100, 1f / 0.3f, this, 60, PooledEnum.THROWABLE_WEIGHT, (Targetable attackable) => TargetingFunction.IsEnemy(this, attackable))
         {
             Modifiers = _modifiers
         };

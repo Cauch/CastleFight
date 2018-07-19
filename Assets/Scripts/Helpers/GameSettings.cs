@@ -4,5 +4,6 @@ using UnityEngine;
 
 public static class GameSettings {
     public static float IncomeSpeedModifier = 1f;
-    public const int SleepRate = 100;
+    public static bool FloatingTextOn = false;
+
 }
