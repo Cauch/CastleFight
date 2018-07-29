@@ -8,7 +8,7 @@ public class Inquisitor : GroundUnit
 
     public override ActiveSkill UseSkill()
     {
-        return TargetingFunction.UseAttack(this, _attack);
+        return TargetingFunction.UseSkill(this, _attack);
     }
 
     new private void Start()

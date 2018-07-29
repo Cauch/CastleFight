@@ -9,7 +9,7 @@ public class Pilgrim : GroundUnit
 
     public override ActiveSkill UseSkill()
     {
-        return TargetingFunction.UseAttack(this, attack);
+        return TargetingFunction.UseSkill(this, attack);
     }
 
     new private void Start()

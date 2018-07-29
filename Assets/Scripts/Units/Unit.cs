@@ -13,6 +13,9 @@ public abstract class Unit : Attackable {
     public GameObject Corpse;
     public GameObject Model;
 
+	protected Move _move;
+	protected bool _headingForCastle = false;
+
     public float DefaultSpeed;
     public float Speed;
     public float DetectionRange;
@@ -51,23 +54,42 @@ public abstract class Unit : Attackable {
         base.Update();
         if (IsActive)
         {
+			// If you have a skill try using it
+			if (_currentSkill != null)
+			{
+				_currentSkill = _currentSkill.Update();
+			}
+
             // If you are doing nothing, chose a skill
-            if(_currentSkill == null)
+            if(_currentSkill == null || _headingForCastle)
             {
                 _currentSkill = UseSkill();
-            }
+				_headingForCastle = false;
+			}
 
-            // If you have a skill refresh it
-            if(_currentSkill != null)
-            {
-                _currentSkill = _currentSkill.Update();
-                StopMoving();
-            }
-            // Otherwise Move
-            else
-            {
-                Move(MoveTarget());
-            }
+			// TODO cauch remove when each skill has its own implementation in use skill
+			if (_currentSkill == null || _headingForCastle)
+			{
+				Targetable target = TargetingFunction.GetClosestTarget(this, null, (Targetable t) => TargetingFunction.IsEnemyUnit(this, t), this.DetectionRange);
+				if (target)
+				{
+					_move.ApplyOnTarget(target);
+					_currentSkill = _move;
+				}
+			}				
+
+			if (_currentSkill == null)
+			{
+				_move.ApplyOnTarget(CastleHelper.GetCastle(!Allegiance));
+				_headingForCastle = true;
+				_currentSkill = _move;
+			}
+
+			// TODO cauch find somewhere better to do that
+			if (Hp <= 0)
+			{
+				_move.Break();
+			}
 
             RefreshCooldown();
         }
@@ -120,12 +142,13 @@ public abstract class Unit : Attackable {
 
     private void OnEnable()
     {
+		_move.SetEnable(true);
         //ChangeModel();
     }
 
     private void OnDisable()
     {
-
+		_move.SetEnable(false);
     }
 
     private void ChangeModel()

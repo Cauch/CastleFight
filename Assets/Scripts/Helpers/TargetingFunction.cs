@@ -31,23 +31,20 @@ public static class TargetingFunction {
         return targets;
     }
 
-    public static ActiveSkill UseAttack(Unit attacker, Attack attack)
+    public static ActiveSkill UseSkill(Unit attacker, ActiveSkill skill)
     {
-        bool atLeastOneTargetInRange = false;
-
-        IEnumerable<Attackable> targets = TargetingFunction.DetectSurroundings(attacker, attack.IsValidTarget).Cast<Attackable>();
+        IEnumerable<Attackable> targets = TargetingFunction.DetectSurroundings(attacker, skill.IsValidTarget).Cast<Attackable>();
 
         foreach (Attackable target in targets)
         {
-            bool targetInRange = attack.IsUsable(attacker, target);
-            atLeastOneTargetInRange = atLeastOneTargetInRange || targetInRange;
+            bool targetInRange = skill.IsUsable(attacker, target);
             if (targetInRange)
             {
-                if (attack.Cooldown <= 0)
+                if (skill.Cooldown <= 0)
                 {
-                    attack.ApplyOnTarget(target);
-                    attack.Cooldown = 1.0f;
-                    return attack;
+                    skill.ApplyOnTarget(target);
+                    skill.Cooldown = 1.0f;
+                    return skill;
                 }
             }
         }
@@ -55,11 +52,11 @@ public static class TargetingFunction {
         return null;
     }
 
-    public static Targetable GetClosestTarget(Unit attacker, Targetable defaultTarget, Func<Targetable, bool> validTarget, float sqrRange = 1000000.0f)
+    public static Targetable GetClosestTarget(Unit attacker, Targetable defaultTarget, Func<Targetable, bool> validTarget, float range = 1000000.0f)
     {
         Targetable target = defaultTarget;
 
-        float closestDistanceSqr = sqrRange;
+        float closestDistanceSqr = range * range;
 
         foreach (Targetable potentialTarget in DetectSurroundings(attacker, validTarget))
         {

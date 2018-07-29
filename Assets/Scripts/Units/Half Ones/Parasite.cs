@@ -28,7 +28,7 @@ public class Parasite : GroundUnit
             }
         }
 
-        return TargetingFunction.UseAttack(this, _attack);
+        return TargetingFunction.UseSkill(this, _attack);
     }
 
     new private void Start()
